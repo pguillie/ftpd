@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/05/10 17:09:34 by pguillie         ###   ########.fr        #
+#    Updated: 2019/05/12 12:32:23 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -28,8 +28,13 @@ server_src = $(addprefix server/, \
 	main.c \
 	server.c \
 	protocol_interpreter.c \
-	reply.c \
+	ftp_exec.c \
+	send_reply.c \
+	die.c \
 	read_line.c \
+	$(addprefix ftp_command/, \
+		pwd.c \
+	) \
 )
 
 server_obj = $(addprefix $(srcdir), $(server_src:%.c=%.o))
