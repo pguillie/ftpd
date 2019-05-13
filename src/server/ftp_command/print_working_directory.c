@@ -1,32 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   print_working_directory.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:20:56 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/12 15:40:08 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/13 07:57:53 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server/server.h"
 
-int pwd(char **arg __attribute__((unused)), int control_sock)
+int print_working_directory(int control_sock)
 {
-	char path[PATH_MAX], *reply;
+	char reply[PATH_MAX + 7];
 
-	if (getcwd(path, sizeof(path)) == NULL) {
-		send_reply(control_sock, "550 Working directory unavailable.");
+	if (getcwd(reply + 5, PATH_MAX) == NULL) {
+		send_reply(control_sock, FTP_FILE_PWD_ERR);
 		return (2);
 	}
-	reply = (char *)malloc(strlen(path) + 7);
-	if (reply == NULL)
-		return (-1);
-	strcpy(reply, "257 \"");
-	strcat(reply, path);
+	memcpy(reply, "257 \"", 5);
 	strcat(reply, "\"");
 	send_reply(control_sock, reply);
-	free(reply);
 	return (0);
 }

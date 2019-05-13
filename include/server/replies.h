@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 16:58:46 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/11 10:28:38 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/13 08:50:32 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,7 @@
 
 # define FTP_AUTH_USER_OK	"230 User logged in, proceed."
 # define FTP_AUTH_USER_ERR	"530 Not logged in."
+
+# define FTP_FILE_PWD_ERR	"550 Working directory unavailable."
 
 #endif /* REPLIES_H */

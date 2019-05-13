@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/26 07:40:07 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/12 15:43:28 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/13 14:23:10 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <stdlib.h> // atoi
 # include <stdio.h>
+# include <fcntl.h>
 # include <string.h> // remove
 # include <limits.h>
 # include <ctype.h>
@@ -37,5 +38,6 @@ int ftp_exec(const char *command, int control_sock);
 void die(int control_sock);
 
 int read_line(int fd, char *buf, size_t bufsz);
+int get_next_line(int fd, char **line);
 
 #endif /* SERVER_H */

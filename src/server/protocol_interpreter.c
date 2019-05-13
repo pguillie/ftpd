@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/12 15:30:30 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/13 06:11:33 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void protocol_interpreter(int control_sock)
 			send_reply(control_sock, FTP_SYNT_TOO_LONG);
 			continue ;
 		}
-		printf("[%s]\n", line);
+		printf("[%s]\n", line); //
 		command = strtok(line, " ");
 		if (ftp_exec(command, control_sock) < 0)
 			die(control_sock);
