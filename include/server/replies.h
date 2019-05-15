@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 16:58:46 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/13 08:50:32 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/15 07:00:55 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # define FTP_SYNT_ERR		"500 Syntax error, command unrecognized."
 # define FTP_SYNT_TOO_LONG	"500 Command line too long."
 # define FTP_SYNT_ARG_ERR	"501 Syntax error in parameters or arguments."
+# define FTP_SYNT_USAGE_USER	"501 Usage: USER USERNAME"
 # define FTP_SYNT_NOT_IMPL	"502 Command not implemented."
 
 # define FTP_INFO_SYS_TYPE	"215 UNIX system type."

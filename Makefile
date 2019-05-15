@@ -6,13 +6,13 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/05/13 14:21:30 by pguillie         ###   ########.fr        #
+#    Updated: 2019/05/15 17:01:26 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 SERVER	= ftpd
 CC	= gcc
-CFLAGS	= -Wall -Werror -Wextra -I$(incdir)
+CFLAGS	= -Wall -Werror -Wextra -I$(incdir) -g
 
 incdir = ./include/
 srcdir = ./src/
