@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 11:38:21 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/13 07:58:37 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/17 12:08:58 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,15 @@ static struct {
 	const char *name;
 	int (*f)(int control_soc);
 } ftp_command[] = {
-	/* {"list", list}, */
-	/* {"cwd", change_wdir}, */
+	{"user", user_name},
+	{"cwd", change_working_directory},
+	{"quit", logout},
+	{"port", data_port},
 	/* {"retr", retrieve}, */
 	/* {"stor", store}, */
 	{"pwd", print_working_directory},
-	/* {"quit", logout} */
-	{"user", user_name}
+	{"list", list},
+	{"syst", system_type}
 };
 
 int ftp_exec(const char *command, int control_sock)

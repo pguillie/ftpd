@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/05/15 17:01:26 by pguillie         ###   ########.fr        #
+#    Updated: 2019/05/17 12:09:15 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -36,7 +36,12 @@ server_src = $(addprefix server/, \
 	get_next_line.c \
 	$(addprefix ftp_command/, \
 		user_name.c \
+		change_working_directory.c \
+		logout.c \
+		data_port.c \
 		print_working_directory.c \
+		list.c \
+		system_type.c \
 	) \
 )
 

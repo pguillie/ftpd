@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_working_directory.c                          :+:      :+:    :+:   */
+/*   change_working_directory.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/12 12:20:56 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/17 07:00:46 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/13 14:55:22 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/16 16:13:06 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,23 @@
 
 struct ftp_client client;
 
-int print_working_directory(int control_sock)
+int change_working_directory(int control_sock)
 {
-	char reply[PATH_MAX + 7];
+	char *path;
 
 	if (!client.user) {
 		send_reply(control_sock, FTP_AUTH_USER_ERR);
 		return (1);
 	}
-	write(1, client.user->pw_name, strlen(client.user->pw_name));
-	if (getcwd(reply + 5, PATH_MAX) == NULL) {
-		send_reply(control_sock, FTP_FILE_PWD_ERR);
-		return (2);
+	path = strtok(NULL, " ");
+	if (path == NULL || strtok(NULL, " ") != NULL) {
+		send_reply(control_sock, FTP_SYNT_ARG_ERR);
+		return (1);
 	}
-	memcpy(reply, "257 \"", 5);
-	strcat(reply, "\"");
-	send_reply(control_sock, reply);
+	if (chdir(path) < 0) {
+		send_reply(control_sock, FTP_FILE_CWD_ERR);
+		return (1);
+	}
+	send_reply(control_sock, FTP_FILE_CWD_OK);
 	return (0);
 }

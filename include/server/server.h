@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/26 07:40:07 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/13 14:23:10 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/16 16:19:39 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <sys/wait.h>
 # include <arpa/inet.h>
 # include <signal.h>
+# include <pwd.h>
 # include <unistd.h>
 # include <stdlib.h> // atoi
 # include <stdio.h>
@@ -39,5 +40,13 @@ void die(int control_sock);
 
 int read_line(int fd, char *buf, size_t bufsz);
 int get_next_line(int fd, char **line);
+
+struct ftp_client {
+	struct passwd *user;
+	struct sockaddr_in ctrl;
+	struct sockaddr_in data;
+};
+
+extern struct ftp_client client;
 
 #endif /* SERVER_H */

@@ -6,22 +6,26 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 09:09:49 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/11 10:49:46 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/17 07:10:17 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server/server.h"
 
+struct ftp_client client;
+
 static int create_server(const char *port)
 {
 	int lsock;
 	struct sockaddr_in addr;
+	int true = 1;
 
 	lsock = socket(AF_INET, SOCK_STREAM, 0);
 	if (lsock < 0) {
 		fprintf(stderr, "Error: socket\n");
 		return (-1);
 	}
+	setsockopt(lsock, SOL_SOCKET, SO_REUSEADDR, &true, sizeof(int));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(atoi(port)); // atoi
 	addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
@@ -39,6 +43,13 @@ static int create_server(const char *port)
 static void chld_handler(int sig __attribute__((unused)))
 {
 	wait4(-1, NULL, 0, NULL);
+}
+
+static void init_client_info(struct sockaddr_in addr)
+{
+	client.user = NULL;
+	client.ctrl = addr;
+	client.data = addr;
 }
 
 int server(const char *port)
@@ -60,6 +71,7 @@ int server(const char *port)
 		pi = fork();
 		if (pi == 0) {
 			close(lsock);
+			init_client_info(addr);
 			protocol_interpreter(control_sock);
 		} else {
 			if (pi < 0)
