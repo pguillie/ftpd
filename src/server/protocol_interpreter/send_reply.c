@@ -1,31 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.h                                           :+:      :+:    :+:   */
+/*   send_reply.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/20 16:14:14 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/20 16:34:11 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/10 15:46:43 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/20 16:35:21 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER_H
-# define SERVER_H
+#include "server/protocol_interpreter.h"
 
-# include <sys/socket.h>
-# include <sys/wait.h>
-# include <arpa/inet.h>
-# include <stdio.h>
+int send_reply(int control_sock, const char *reply)
+{
+	char buf[128];
+	size_t len;
 
-#include <stdlib.h>
-
-struct socket_info {
-	struct sockaddr_in addr;
-	int sock;
-};
-
-int server(const char *port);
-//int protocol_interpreter(struct socket_info control);
-
-#endif /* SERVER_H */
+	len = strlen(reply);
+	if (len + EOL_LENGTH <= sizeof(buf)) {
+		memcpy(buf, reply, len);
+		memcpy((char *)buf + len, EOL, EOL_LENGTH);
+		if (send(control_sock, buf, len + EOL_LENGTH, 0) < 0)
+			return (-1);
+		return (0);
+	}
+	// above: if -> while
+	return (1);
+}

@@ -6,11 +6,11 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 06:40:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/16 16:28:35 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/20 17:17:20 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/server.h"
+#include "server/protocol_interpreter.h"
 
 struct ftp_client client;
 
@@ -44,6 +44,5 @@ int user_name(int control_sock)
 	}
 	client.user = pw;
 	send_reply(control_sock, FTP_AUTH_USER_OK);
-	system("id"); //process still belongs to group `0(root)'.
 	return (0);
 }

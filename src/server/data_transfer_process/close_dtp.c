@@ -1,30 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   send_reply.c                                       :+:      :+:    :+:   */
+/*   close_dtp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/10 15:46:43 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/12 15:16:05 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/20 13:51:18 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/21 12:10:54 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/server.h"
+#include "server/data_transfer_process.h"
 
-int send_reply(int control_sock, const char *reply)
+pid_t pi;
+
+void close_dtp(int data_sock)
 {
-	char buf[128];
-	size_t len;
-
-	len = strlen(reply);
-	if (len + EOL_LENGTH <= sizeof(buf)) {
-		memcpy(buf, reply, len);
-		memcpy((char *)buf + len, EOL, EOL_LENGTH);
-		if (send(control_sock, buf, len + EOL_LENGTH, 0) < 0)
-			return (-1);
-		return (0);
-	}
-	// above: if -> while
-	return (1);
+	close(data_sock);
+	kill(pi, SIGUSR1);
 }

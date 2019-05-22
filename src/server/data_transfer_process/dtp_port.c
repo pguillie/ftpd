@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.h                                           :+:      :+:    :+:   */
+/*   dtp_port.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/20 16:14:14 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/20 16:34:11 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/21 10:32:37 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/21 13:26:34 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER_H
-# define SERVER_H
+#include "server/data_transfer_process.h"
 
-# include <sys/socket.h>
-# include <sys/wait.h>
-# include <arpa/inet.h>
-# include <stdio.h>
+struct sockaddr_in client_dtp;
 
-#include <stdlib.h>
-
-struct socket_info {
-	struct sockaddr_in addr;
-	int sock;
-};
-
-int server(const char *port);
-//int protocol_interpreter(struct socket_info control);
-
-#endif /* SERVER_H */
+int dtp_port(const char *sockaddr)
+{
+	write(2, "PORT\n", 5);
+	client_dtp = *((struct sockaddr_in *)sockaddr);
+	write(1, "200", 3);
+	return (0);
+}

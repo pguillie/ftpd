@@ -6,11 +6,11 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 14:55:22 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/16 16:13:06 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/20 16:35:30 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/server.h"
+#include "server/protocol_interpreter.h"
 
 struct ftp_client client;
 

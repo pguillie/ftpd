@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/05/17 12:09:15 by pguillie         ###   ########.fr        #
+#    Updated: 2019/05/21 10:36:52 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -20,28 +20,38 @@ srcdir = ./src/
 # server #
 
 server_hdr = $(addprefix server/, \
-	server.h \
+	protocol_interpreter.h \
 	replies.h \
 	ftp_command.h \
+	data_transfer_process.h \
 )
 
 server_src = $(addprefix server/, \
 	main.c \
 	server.c \
-	protocol_interpreter.c \
-	ftp_exec.c \
-	send_reply.c \
-	die.c \
-	read_line.c \
-	get_next_line.c \
-	$(addprefix ftp_command/, \
-		user_name.c \
-		change_working_directory.c \
-		logout.c \
-		data_port.c \
-		print_working_directory.c \
-		list.c \
-		system_type.c \
+	$(addprefix protocol_interpreter/, \
+		protocol_interpreter.c \
+		ftp_exec.c \
+		send_reply.c \
+		die.c \
+		read_line.c \
+		$(addprefix ftp_command/, \
+			user_name.c \
+			change_working_directory.c \
+			logout.c \
+			data_port.c \
+			print_working_directory.c \
+			list.c \
+			system_type.c \
+		) \
+	) \
+	$(addprefix data_transfer_process/, \
+		data_transfer_process.c \
+		transfer_function.c \
+		dtp_list.c \
+		dtp_port.c \
+		connect_dtp.c \
+		close_dtp.c \
 	) \
 )
 

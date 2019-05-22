@@ -6,11 +6,11 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/16 14:41:08 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/16 14:41:17 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/20 16:37:56 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/server.h"
+#include "server/protocol_interpreter.h"
 
 int system_type(int control_sock)
 {

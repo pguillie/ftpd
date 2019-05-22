@@ -1,31 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.h                                           :+:      :+:    :+:   */
+/*   server_dtp.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/20 16:14:14 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/20 16:34:11 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/20 12:53:25 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/21 13:26:21 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER_H
-# define SERVER_H
+#ifndef SERVER_DTP_H
+# define SERVER_DTP_H
 
 # include <sys/socket.h>
 # include <sys/wait.h>
 # include <arpa/inet.h>
+# include <signal.h>
+# include <pwd.h>
+# include <unistd.h>
+# include <stdlib.h> // atoi
 # include <stdio.h>
+# include <fcntl.h>
+# include <string.h> // remove
+# include <limits.h>
+# include <ctype.h>
 
-#include <stdlib.h>
+void transfer_function(const char *transfer);
 
-struct socket_info {
-	struct sockaddr_in addr;
-	int sock;
-};
+int dtp_port(const char *sockaddr);
+int dtp_list(const char *path);
 
-int server(const char *port);
-//int protocol_interpreter(struct socket_info control);
+int connect_dtp(void);
+void close_dtp(int data_sock);
 
-#endif /* SERVER_H */
+extern struct sockaddr_in client_dtp;
+
+#endif /* SERVER_DTP_H */

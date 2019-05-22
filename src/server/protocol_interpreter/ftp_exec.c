@@ -6,11 +6,11 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 11:38:21 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/17 12:08:58 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/21 11:06:52 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/server.h"
+#include "server/protocol_interpreter.h"
 
 static struct {
 	const char *name;

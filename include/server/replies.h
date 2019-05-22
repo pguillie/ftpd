@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 16:58:46 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/17 12:10:43 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/21 11:02:20 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define FTP_CONN_DATA_CLOSE	"226 Closing data connection."
 # define FTP_CONN_CTRL_ERR	"421 Service not available, closing control connection."
 # define FTP_CONN_DATA_OPEN_ERR	"425 Can't open data connection."
-
+# define FTP_CONN_DATA_ERR	"426 Connection closed; transfer aborted."
 # define FTP_AUTH_USER_OK	"230 User logged in, proceed."
 # define FTP_AUTH_USER_ERR	"530 Not logged in."
 
