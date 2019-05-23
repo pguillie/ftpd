@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/26 07:40:07 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/20 17:26:46 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/23 17:07:21 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,40 @@
 # include <limits.h>
 # include <ctype.h>
 
+# include "../libft/include/libft.h"
 # include "replies.h"
 # include "ftp_command.h"
 
 # define EOL "\r\n"
 # define EOL_LENGTH (2)
 
-int server(const char *port);
-void protocol_interpreter(int control_sock);
-void data_transfer_process(void);
-int send_reply(int control_sock, const char *reply);
-int ftp_exec(const char *command, int control_sock);
-void die(int control_sock); //add dtp_pid to kill it too
-
-int read_line(int fd, char *buf, size_t bufsz);
-int get_next_line(int fd, char **line);
+struct connected_socket {
+	struct sockaddr_in addr;
+	int sock;
+};
 
 struct ftp_client {
 	struct passwd *user;
-	struct sockaddr_in ctrl;
-	struct sockaddr_in data;
+	struct connected_socket control;
+	struct connected_socket data;
 };
+
+enum e_dtp_type {
+	DTP_LIST,
+	DTP_RETRIEVE,
+	DTP_STORE,
+	DTP_TYPE_NUMBER
+};
+
+int server(const char *port);
+int protocol_interpreter(struct connected_socket control);
+/* void data_transfer_process(void); */
+int send_reply(const char *reply);
+int ftp_exec(const char *command, char *arguments);
+void die(void);
+
+int data_transfer_process(enum e_dtp_type id, const char *file);
+int dtp_list(int data_sock, const char *file);
 
 extern struct ftp_client client;
 

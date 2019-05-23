@@ -6,11 +6,11 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 19:32:32 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/13 14:37:35 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/22 05:05:59 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/server.h"
+#include "libft.h"
 
 static char	*strnapp(char **str, char *to_add, size_t n)
 {

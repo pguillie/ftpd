@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/20 16:14:14 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/20 16:34:11 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/23 16:05:38 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,6 @@
 # include <stdio.h>
 
 #include <stdlib.h>
-
-struct socket_info {
-	struct sockaddr_in addr;
-	int sock;
-};
 
 int server(const char *port);
 //int protocol_interpreter(struct socket_info control);

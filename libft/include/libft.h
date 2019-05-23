@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   close_dtp.c                                        :+:      :+:    :+:   */
+/*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/20 13:51:18 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/21 12:10:54 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/22 05:05:16 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/22 11:48:59 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/data_transfer_process.h"
+#ifndef LIBFT_H
+# define LIBFT_H
 
-pid_t pi;
+# include <unistd.h>
+# include <stdlib.h>
+# include <string.h>
 
-void close_dtp(int data_sock)
-{
-	close(data_sock);
-	kill(pi, SIGUSR1);
-}
+int get_next_line(int fd, char **line);
+int read_line(int fd, char *line, size_t linesz);
+
+#endif /* LIBFT_H */

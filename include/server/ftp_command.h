@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:28:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/16 14:40:47 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/23 16:44:19 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 
 /* ACCESS CONTROL COMMANDS */
 
-int user_name(int control_sock);
-int change_working_directory(int control_sock);
-int logout(int control_sock);
+int user_name(char *arguments);
+int change_working_directory(char *arguments);
+int logout(char *arguments);
 
 /* TRANSFER PARAMETER COMMANDS */
 
-int data_port(int control_sock);
+int data_port(char *arguments);
 
 /* FTP SERVICE COMMANDS */
 
-int retrieve(int control_sock);
-int store(int control_sock);
-int print_working_directory(int control_sock);
-int list(int control_sock);
-int system_type(int control_sock);
+int retrieve(char *arguments);
+int store(char *arguments);
+int print_working_directory(char *arguments);
+int list(char *arguments);
+int system_type(char *arguments);
 
 #endif /* FTP_COMMAND_H */

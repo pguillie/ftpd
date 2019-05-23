@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dtp_port.c                                         :+:      :+:    :+:   */
+/*   dtp_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/21 10:32:37 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/21 13:26:34 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/23 13:30:37 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/23 17:10:21 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/data_transfer_process.h"
+#include "server/protocol_interpreter.h"
 
-struct sockaddr_in client_dtp;
-
-int dtp_port(const char *sockaddr)
+int dtp_list(int data_sock, const char *file)
 {
-	write(2, "PORT\n", 5);
-	client_dtp = *((struct sockaddr_in *)sockaddr);
-	write(1, "200", 3);
+	send(data_sock, file, strlen(file), 0);
 	return (0);
 }

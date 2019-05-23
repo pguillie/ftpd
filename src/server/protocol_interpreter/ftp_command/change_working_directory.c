@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 14:55:22 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/20 16:35:30 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/23 16:58:32 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,23 @@
 
 struct ftp_client client;
 
-int change_working_directory(int control_sock)
+int change_working_directory(char *arguments)
 {
 	char *path;
 
 	if (!client.user) {
-		send_reply(control_sock, FTP_AUTH_USER_ERR);
+		send_reply(FTP_AUTH_USER_ERR);
 		return (1);
 	}
-	path = strtok(NULL, " ");
+	path = strtok(arguments, " ");
 	if (path == NULL || strtok(NULL, " ") != NULL) {
-		send_reply(control_sock, FTP_SYNT_ARG_ERR);
+		send_reply(FTP_SYNT_ARG_ERR);
 		return (1);
 	}
 	if (chdir(path) < 0) {
-		send_reply(control_sock, FTP_FILE_CWD_ERR);
+		send_reply(FTP_FILE_CWD_ERR);
 		return (1);
 	}
-	send_reply(control_sock, FTP_FILE_CWD_OK);
+	send_reply(FTP_FILE_CWD_OK);
 	return (0);
 }

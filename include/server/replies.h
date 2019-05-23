@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 16:58:46 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/21 11:02:20 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/23 12:38:22 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 
 # define FTP_FILE_DATA_OK	"150 File status okay; about to open data connection."
 # define FTP_FILE_CWD_OK	"250 Working directory changed."
+# define FTP_FILE_LIST_ERR	"450 File unavailable."
 # define FTP_FILE_CWD_ERR	"550 Unable to change working directory."
 # define FTP_FILE_PWD_ERR	"550 Working directory unavailable."
 
