@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/23 17:07:46 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/24 06:50:02 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,6 @@ int protocol_interpreter(struct connected_socket control)
 		if (ftp_exec(command, arguments) < 0)
 			die();
 	}
-	close(client.control.sock); //whole client data
+	close(client.control.sock); //whole client data?
 	return (ret < 0 ? 1 : 0);
 }

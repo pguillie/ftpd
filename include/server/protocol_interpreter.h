@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/26 07:40:07 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/23 17:07:21 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/24 11:15:06 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,10 @@ int send_reply(const char *reply);
 int ftp_exec(const char *command, char *arguments);
 void die(void);
 
-int data_transfer_process(enum e_dtp_type id, const char *file);
-int dtp_list(int data_sock, const char *file);
+pid_t data_transfer_process(enum e_dtp_type id, const char *file);
+int dtp_list(const char *file);
+
+void convert_endofline(int input, int output);
 
 extern struct ftp_client client;
 

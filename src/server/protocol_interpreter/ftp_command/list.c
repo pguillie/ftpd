@@ -6,13 +6,14 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 11:30:09 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/23 17:05:51 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/24 10:30:08 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server/protocol_interpreter.h"
 
 struct ftp_client client;
+pid_t dtp;
 
 int list(char *arguments)
 {
@@ -34,6 +35,6 @@ int list(char *arguments)
 		return (1);
 	}
 	send_reply(FTP_FILE_DATA_OK);
-	data_transfer_process(DTP_LIST, path);
+	dtp = data_transfer_process(DTP_LIST, path);
 	return (0);
 }
