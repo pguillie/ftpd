@@ -1,40 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list.c                                             :+:      :+:    :+:   */
+/*   recv_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/17 11:30:09 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/25 12:22:40 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/25 11:55:38 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/25 13:39:19 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server/protocol_interpreter.h"
 
 struct ftp_client client;
-pid_t dtp;
 
-int list(char *arguments)
+void recv_data(int fd)
 {
-	char *path;
+	char buf[1024], data[1024];
+	ssize_t n;
+	size_t i, j;
 
-	if (!client.user) {
-		send_reply(FTP_AUTH_USER_ERR);
-		return (1);
+	i = 0;
+	while ((n = read(client.data.sock, data, sizeof(data))) > 0) {
+		j = 0;
+		while (j < (size_t)n) {
+			if (data[j] == '\r') {
+				j++;
+				continue ;
+			}
+			buf[i++] = data[j++];
+			if (i == sizeof(buf)) {
+				write(fd, buf, i);
+				i = 0;
+			}
+		}
 	}
-	path = strtok(arguments, " ");
-	if (strtok(NULL, " ") != NULL) {
-		send_reply(FTP_SYNT_ARG_ERR);
-		return (1);
-	}
-	if (path == NULL)
-		path = ".";
-	if (access(path, F_OK) != 0) {
-		send_reply(FTP_FILE_LIST_ERR);
-		return (1);
-	}
-	send_reply(FTP_FILE_LIST_START);
-	dtp = data_transfer_process(DTP_LIST, path);
-	return (0);
+	write(fd, buf, i);
 }

@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/26 07:40:07 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/24 11:15:06 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/25 13:14:55 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,9 @@ struct ftp_client {
 };
 
 enum e_dtp_type {
-	DTP_LIST,
-	DTP_RETRIEVE,
-	DTP_STORE,
-	DTP_TYPE_NUMBER
+	DTP_RETR,
+	DTP_STOR,
+	DTP_LIST
 };
 
 int server(const char *port);
@@ -59,9 +58,12 @@ int ftp_exec(const char *command, char *arguments);
 void die(void);
 
 pid_t data_transfer_process(enum e_dtp_type id, const char *file);
+int dtp_retr(const char *file);
+int dtp_stor(const char *file);
 int dtp_list(const char *file);
 
-void convert_endofline(int input, int output);
+void recv_data(int fd);
+void send_data(int fd);
 
 extern struct ftp_client client;
 

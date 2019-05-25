@@ -1,40 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list.c                                             :+:      :+:    :+:   */
+/*   dtp_retr.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/17 11:30:09 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/25 12:22:40 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/25 12:27:38 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/25 12:32:11 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server/protocol_interpreter.h"
 
 struct ftp_client client;
-pid_t dtp;
 
-int list(char *arguments)
+int dtp_retr(const char *file)
 {
-	char *path;
+	int fd;
 
-	if (!client.user) {
-		send_reply(FTP_AUTH_USER_ERR);
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
 		return (1);
-	}
-	path = strtok(arguments, " ");
-	if (strtok(NULL, " ") != NULL) {
-		send_reply(FTP_SYNT_ARG_ERR);
-		return (1);
-	}
-	if (path == NULL)
-		path = ".";
-	if (access(path, F_OK) != 0) {
-		send_reply(FTP_FILE_LIST_ERR);
-		return (1);
-	}
-	send_reply(FTP_FILE_LIST_START);
-	dtp = data_transfer_process(DTP_LIST, path);
+	send_data(fd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:30:37 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/24 11:37:45 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/25 11:23:50 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int dtp_list(const char *file)
 			return (2);
 	}
 	close(pipefd[1]);
-	convert_endofline(pipefd[0], client.data.sock);
+	send_data(pipefd[0]);
 	wait4(ls, &ret, 0, NULL);
 	if (WIFEXITED(ret))
 		return (WEXITSTATUS(ret));

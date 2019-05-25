@@ -1,35 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   convert_endofline.c                                :+:      :+:    :+:   */
+/*   dtp_stor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/24 10:49:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/24 12:34:21 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/25 13:16:32 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/25 13:39:26 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server/protocol_interpreter.h"
 
-void convert_endofline(int input, int output)
-{
-	char bufin[1024], bufout[1024];
-	ssize_t n;
-	size_t i, j;
+struct ftp_client client;
 
-	j = 0;
-	while ((n = read(input, bufin, sizeof(bufin))) > 0) {
-		i = 0;
-		while (i < (size_t)n) {
-			if (bufin[i] == '\n')
-				bufout[j++] = '\r';
-			bufout[j++] = bufin[i++];
-			if (j == sizeof(bufout)) {
-				write(output, bufout, j);
-				j = 0;
-			}
-		}
-	}
-	write(output, bufout, j);
+int dtp_stor(const char *file)
+{
+	int fd;
+
+	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+		return (1);
+	recv_data(fd);
+	return (0);
 }

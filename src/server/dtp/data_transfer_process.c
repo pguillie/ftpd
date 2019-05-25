@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:07:39 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/24 11:37:51 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/25 13:16:00 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ struct ftp_client client;
 typedef int (*dtp_function)(const char *file);
 
 dtp_function dtp_command[] = {
+	&dtp_retr,
+	&dtp_stor,
 	&dtp_list
 };
 

@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 06:40:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/23 16:51:42 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/25 13:27:41 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int user_name(char *arguments)
 	client.user = NULL;
 	name = strtok(arguments, " ");
 	if (name == NULL || strtok(NULL, " ") != NULL) {
-		send_reply(FTP_SYNT_USAGE_USER);
+		send_reply(FTP_SYNT_ARG_ERR);
 		return (1);
 	}
 	pw = getpwnam(name);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list.c                                             :+:      :+:    :+:   */
+/*   store.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/17 11:30:09 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/25 12:22:40 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/25 13:12:38 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/25 13:26:21 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,24 @@
 struct ftp_client client;
 pid_t dtp;
 
-int list(char *arguments)
+int store(char *arguments)
 {
-	char *path;
+	char *file;
 
 	if (!client.user) {
 		send_reply(FTP_AUTH_USER_ERR);
 		return (1);
 	}
-	path = strtok(arguments, " ");
-	if (strtok(NULL, " ") != NULL) {
+	file = strtok(arguments, " ");
+	if (file == NULL || strtok(NULL, " ") != NULL) {
 		send_reply(FTP_SYNT_ARG_ERR);
 		return (1);
 	}
-	if (path == NULL)
-		path = ".";
-	if (access(path, F_OK) != 0) {
-		send_reply(FTP_FILE_LIST_ERR);
-		return (1);
-	}
-	send_reply(FTP_FILE_LIST_START);
-	dtp = data_transfer_process(DTP_LIST, path);
+	/* if (access(file, R_OK) != 0) { */
+	/* 	send_reply(FTP_FILE_ERR); */
+	/* 	return (1); */
+	/* } */
+	send_reply(FTP_FILE_STOR_START);
+	dtp = data_transfer_process(DTP_STOR, file);
 	return (0);
 }

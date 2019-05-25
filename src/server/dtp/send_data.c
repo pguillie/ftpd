@@ -1,40 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list.c                                             :+:      :+:    :+:   */
+/*   send_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/17 11:30:09 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/25 12:22:40 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/24 10:49:01 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/25 11:27:22 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server/protocol_interpreter.h"
 
 struct ftp_client client;
-pid_t dtp;
 
-int list(char *arguments)
+void send_data(int fd)
 {
-	char *path;
+	char buf[1024], data[1024];
+	ssize_t n;
+	size_t i, j;
 
-	if (!client.user) {
-		send_reply(FTP_AUTH_USER_ERR);
-		return (1);
+	i = 0;
+	while ((n = read(fd, buf, sizeof(buf))) > 0) {
+		j = 0;
+		while (j < (size_t)n) {
+			if (buf[j] == '\n')
+				data[i++] = '\r';
+			data[i++] = buf[j++];
+			if (i == sizeof(data)) {
+				write(client.data.sock, data, i);
+				i = 0;
+			}
+		}
 	}
-	path = strtok(arguments, " ");
-	if (strtok(NULL, " ") != NULL) {
-		send_reply(FTP_SYNT_ARG_ERR);
-		return (1);
-	}
-	if (path == NULL)
-		path = ".";
-	if (access(path, F_OK) != 0) {
-		send_reply(FTP_FILE_LIST_ERR);
-		return (1);
-	}
-	send_reply(FTP_FILE_LIST_START);
-	dtp = data_transfer_process(DTP_LIST, path);
-	return (0);
+	write(client.data.sock, data, i);
 }

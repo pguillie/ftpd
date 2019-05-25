@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/05/24 11:16:46 by pguillie         ###   ########.fr        #
+#    Updated: 2019/05/25 13:28:48 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -40,6 +40,8 @@ server_src = $(addprefix server/, \
 			change_working_directory.c \
 			logout.c \
 			data_port.c \
+			retrieve.c \
+			store.c \
 			print_working_directory.c \
 			list.c \
 			system_type.c \
@@ -47,8 +49,11 @@ server_src = $(addprefix server/, \
 	) \
 	$(addprefix dtp/, \
 		data_transfer_process.c \
+		dtp_retr.c \
+		dtp_stor.c \
 		dtp_list.c \
-		convert_endofline.c \
+		recv_data.c \
+		send_data.c \
 	) \
 )
 

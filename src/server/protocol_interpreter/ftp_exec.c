@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 11:38:21 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/23 16:55:53 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/25 13:00:07 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ static struct {
 	{"cwd", change_working_directory},
 	{"quit", logout},
 	{"port", data_port},
-	/* {"retr", retrieve}, */
-	/* {"stor", store}, */
+	{"retr", retrieve},
+	{"stor", store},
 	{"pwd", print_working_directory},
 	{"list", list},
 	{"syst", system_type}
