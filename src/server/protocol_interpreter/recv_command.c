@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_line.c                                        :+:      :+:    :+:   */
+/*   recv_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 05:13:33 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/13 11:49:43 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/25 16:46:45 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <string.h>
-#include <stdio.h>
+#include "server/protocol_interpreter.h"
+
+struct ftp_client client;
 
 static int copy_line(char *line, size_t size, char *buf, size_t n)
 {
@@ -23,7 +23,7 @@ static int copy_line(char *line, size_t size, char *buf, size_t n)
 	return (0);
 }
 
-int read_line(int fd, char *line, size_t size)
+int recv_command(char *line, size_t size)
 {
 	static char buf[1024];
 	static ssize_t n;
@@ -33,11 +33,11 @@ int read_line(int fd, char *line, size_t size)
 
 	i = 0;
 	overflow = 0;
-	while ((nl = memchr(buf, '\n', n)) == NULL) {
+	while ((nl = (char *)ft_memmem(buf, n, "\r\n", 2)) == NULL) {
 		if (!overflow)
 			overflow = copy_line(line + i, size - i, buf, n);
 		i += n;
-		n = read(fd, buf, sizeof(buf));
+		n = read(client.control.sock, buf, sizeof(buf));
 		if (n < 0) {
 			n = 0;
 			return (-1);
@@ -46,8 +46,8 @@ int read_line(int fd, char *line, size_t size)
 		}
 	}
 	if (!overflow)
-		overflow = copy_line(line + i, size - i, buf, nl - buf - 1);
-	n = buf + n - (nl + 1);
-	memmove(buf, nl + 1, n);
+		overflow = copy_line(line + i, size - i, buf, nl - buf);
+	n = buf + n - (nl + 2);
+	memmove(buf, nl + 2, n);
 	return (overflow ? 2 : 1);
 }

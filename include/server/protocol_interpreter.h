@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/26 07:40:07 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/25 13:14:55 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/25 16:57:43 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ enum e_dtp_type {
 
 int server(const char *port);
 int protocol_interpreter(struct connected_socket control);
-/* void data_transfer_process(void); */
+int recv_command(char *command, size_t commandsz);
 int send_reply(const char *reply);
 int ftp_exec(const char *command, char *arguments);
 void die(void);

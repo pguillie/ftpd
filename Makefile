@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/05/25 13:28:48 by pguillie         ###   ########.fr        #
+#    Updated: 2019/05/25 15:27:58 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -33,6 +33,7 @@ server_src = $(addprefix server/, \
 	$(addprefix protocol_interpreter/, \
 		protocol_interpreter.c \
 		ftp_exec.c \
+		recv_command.c \
 		send_reply.c \
 		die.c \
 		$(addprefix ftp_command/, \

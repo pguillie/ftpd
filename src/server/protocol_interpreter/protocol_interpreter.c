@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/24 06:50:02 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/25 15:13:56 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int protocol_interpreter(struct connected_socket control)
 	if (signal(SIGCHLD, dtp_exit_status) == SIG_ERR)
 		return (2);
 	send_reply(FTP_CONN_CTRL_READY);
-	while ((ret = read_line(client.control.sock, line, sizeof(line))) > 0) {
+	while ((ret = recv_command(line, sizeof(line))) > 0) {
 		if (ret > 1) {
 			send_reply(FTP_SYNT_TOO_LONG);
 			continue ;

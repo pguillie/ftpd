@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/22 04:54:10 by pguillie          #+#    #+#              #
-#    Updated: 2019/05/22 11:47:36 by pguillie         ###   ########.fr        #
+#    Updated: 2019/05/25 16:23:09 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -21,7 +21,7 @@ srcdir = ./src/
 
 hdr = libft.h
 
-src = get_next_line.c read_line.c
+src = get_next_line.c ft_memmem.c
 
 obj = $(addprefix $(srcdir), $(src:%.c=%.o))
 
