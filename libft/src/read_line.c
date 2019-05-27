@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   read_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 19:32:32 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/22 05:05:59 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/27 08:46:34 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*strnapp(char **str, char *to_add, size_t n)
+static char *ft_strnapp(char **str, char *to_add, size_t n)
 {
-	char	*res;
-	size_t	len;
+	char *res;
+	size_t len;
 
-	len = (*str ? strlen(*str) : 0);
+	len = (*str ? ft_strlen(*str) : 0);
 	if ((res = (char *)malloc(len + n + 1)) == NULL)
 		return (NULL);
 	res[len + n] = '\0';
@@ -30,18 +30,16 @@ static char	*strnapp(char **str, char *to_add, size_t n)
 	return (res);
 }
 
-static int	get_next_line_return(char **line, char **s, char *nl)
+static int read_line_return(char **line, char **s, char *nl)
 {
-	if (nl != NULL)
-	{
-		if ((*line = strndup(*s, (size_t)nl - (size_t)*s)) == NULL)
+	if (nl != NULL) {
+		if ((*line = ft_strndup(*s, (size_t)nl - (size_t)*s)) == NULL)
 			return (-1);
-		memmove(*s, nl + 1, strlen(nl));
+		ft_memmove(*s, nl + 1, ft_strlen(nl));
 		return (1);
 	}
-	if (*s && (*s)[0])
-	{
-		if ((*line = strdup(*s)) == NULL)
+	if (*s && (*s)[0]) {
+		if ((*line = ft_strdup(*s)) == NULL)
 			return (-1);
 		free(*s);
 		*s = NULL;
@@ -50,24 +48,23 @@ static int	get_next_line_return(char **line, char **s, char *nl)
 	return (0);
 }
 
-int			get_next_line(int fd, char **line)
+int read_line(int fd, char **line)
 {
-	static char	*s;
-	char		buf[1024];
-	char		*nl;
-	ssize_t		c;
+	static char *s;
+	char buf[1024];
+	char *nl;
+	ssize_t c;
 
 	if (!line || fd < 0)
 		return (-1);
 	c = sizeof(buf);
-	while ((!s || (nl = strchr(s, '\n')) == NULL) && c == sizeof(buf))
-	{
-		memset(buf, 0, sizeof(buf));
+	while ((!s || (nl = ft_strchr(s, '\n')) == NULL) && c == sizeof(buf)) {
+		ft_memset(buf, 0, sizeof(buf));
 		if ((c = read(fd, buf, sizeof(buf))) > 0)
-			if (strnapp(&s, buf, c) == NULL)
+			if (ft_strnapp(&s, buf, c) == NULL)
 				return (-1);
 	}
 	if (c < 0)
 		return (-1);
-	return (get_next_line_return(line, &s, nl));
+	return (read_line_return(line, &s, nl));
 }

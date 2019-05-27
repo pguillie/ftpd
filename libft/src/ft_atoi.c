@@ -1,29 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmem.c                                        :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/25 16:03:37 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/27 08:45:53 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/27 08:45:44 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/27 08:45:46 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void *ft_memmem(const void *haystack, size_t haystacklen,
-	const void *needle, size_t needlelen)
+int ft_atoi(const char *nptr)
 {
+	int n;
 	size_t i;
 
-	if (haystack == NULL || needle == NULL)
-		return ((void *)haystack);
+	while (ft_isspace(*nptr))
+		nptr++;
+	n = 0;
 	i = 0;
-	while (i < haystacklen) {
-		if (ft_memcmp(haystack + i, needle, needlelen) == 0)
-			return ((void *)haystack + i);
+	if (nptr[0] == '-' || nptr[0] == '+')
 		i++;
+	if (nptr[0] == '-') {
+		while (ft_isdigit(nptr[i]))
+			n = n * 10 - nptr[i++] + '0';
+	} else {
+		while (ft_isdigit(nptr[i]))
+			n = n * 10 + nptr[i++] - '0';
 	}
-	return (NULL);
+	return (n);
 }

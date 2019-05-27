@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 09:09:49 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/24 05:58:03 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/27 08:02:29 by paul             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int create_server(const char *port)
 	}
 	setsockopt(lsock, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int));
 	addr.sin_family = AF_INET;
-	addr.sin_port = htons(atoi(port)); // atoi
+	addr.sin_port = htons(ft_atoi(port));
 	addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 	if (bind(lsock, (struct sockaddr *)&addr, sizeof(addr))) {
 		fprintf(stderr, "Error: bind\n");

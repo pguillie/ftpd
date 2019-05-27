@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/05/25 15:27:58 by pguillie         ###   ########.fr        #
+#    Updated: 2019/05/27 07:30:27 by paul             ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -48,7 +48,7 @@ server_src = $(addprefix server/, \
 			system_type.c \
 		) \
 	) \
-	$(addprefix dtp/, \
+	$(addprefix data_transfer_process/, \
 		data_transfer_process.c \
 		dtp_retr.c \
 		dtp_stor.c \
@@ -64,11 +64,11 @@ server_obj = $(addprefix $(srcdir), $(server_src:%.c=%.o))
 
 .PHONY: all server clean fclean re
 
-all: $(LIBFT) server
+all: server
 
 server: $(SERVER)
 
-$(SERVER): $(server_obj)
+$(SERVER): $(LIBFT) $(server_obj)
 	$(CC) -o $@ $^ -L$(dir $(LIBFT)) -lft
 
 $(server_obj): $(addprefix $(incdir), $(server_hdr))

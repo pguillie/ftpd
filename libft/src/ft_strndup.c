@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmem.c                                        :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/25 16:03:37 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/27 08:45:53 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/27 08:46:28 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/27 08:46:28 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void *ft_memmem(const void *haystack, size_t haystacklen,
-	const void *needle, size_t needlelen)
+char *ft_strndup(const char *s, size_t n)
 {
-	size_t i;
+	char *dup;
+	size_t l;
 
-	if (haystack == NULL || needle == NULL)
-		return ((void *)haystack);
-	i = 0;
-	while (i < haystacklen) {
-		if (ft_memcmp(haystack + i, needle, needlelen) == 0)
-			return ((void *)haystack + i);
-		i++;
+	l = ft_strlen(s);
+	if (l < n)
+		n = l;
+	dup = malloc(n);
+	if (dup != NULL) {
+		ft_memcpy(dup, s, n);
+		dup[n] = '\0';
 	}
-	return (NULL);
+	return (dup);
 }

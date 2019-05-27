@@ -6,20 +6,19 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/25 15:13:56 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/05/27 08:22:19 by paul             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server/protocol_interpreter.h"
 
 struct ftp_client client;
-pid_t dtp;
 
 static void dtp_exit_status(int sig __attribute__((unused)))
 {
 	int ret;
 
-	wait4(dtp, &ret, 0, NULL);
+	wait4(-1, &ret, 0, NULL);
 	if (WIFEXITED(ret)) {
 		if (WEXITSTATUS(ret) == 0)
 			send_reply(FTP_CONN_DATA_CLOSE);
