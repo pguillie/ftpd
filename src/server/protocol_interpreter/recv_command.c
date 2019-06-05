@@ -6,13 +6,11 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 05:13:33 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/25 16:46:45 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/06/04 11:56:19 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server/protocol_interpreter.h"
-
-struct ftp_client client;
 
 static int copy_line(char *line, size_t size, char *buf, size_t n)
 {
@@ -23,7 +21,7 @@ static int copy_line(char *line, size_t size, char *buf, size_t n)
 	return (0);
 }
 
-int recv_command(char *line, size_t size)
+int recv_command(int control_sock, char *line, size_t size)
 {
 	static char buf[1024];
 	static ssize_t n;
@@ -37,7 +35,7 @@ int recv_command(char *line, size_t size)
 		if (!overflow)
 			overflow = copy_line(line + i, size - i, buf, n);
 		i += n;
-		n = read(client.control.sock, buf, sizeof(buf));
+		n = read(control_sock, buf, sizeof(buf));
 		if (n < 0) {
 			n = 0;
 			return (-1);

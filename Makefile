@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/05/27 07:30:27 by paul             ###   ########.fr        #
+#    Updated: 2019/06/01 11:23:20 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -23,8 +23,8 @@ srcdir = ./src/
 
 server_hdr = $(addprefix server/, \
 	protocol_interpreter.h \
-	replies.h \
 	ftp_command.h \
+	ftp_reply.h \
 )
 
 server_src = $(addprefix server/, \
@@ -32,7 +32,7 @@ server_src = $(addprefix server/, \
 	server.c \
 	$(addprefix protocol_interpreter/, \
 		protocol_interpreter.c \
-		ftp_exec.c \
+		execute.c \
 		recv_command.c \
 		send_reply.c \
 		die.c \

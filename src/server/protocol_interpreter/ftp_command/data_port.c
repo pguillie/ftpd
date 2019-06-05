@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/16 15:45:27 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/23 17:02:52 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/06/03 20:43:42 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ int data_port(char *arguments)
 	size_t i;
 
 	if (!client.user) {
-		send_reply(FTP_AUTH_USER_ERR);
+		send_reply(client.control.sock, FTP_AUTH_ERR);
 		return (1);
 	}
 	addr = strtok(arguments, " ");
 	if (addr == NULL || strtok(NULL, " ") != NULL
 		|| !data_port_syntax(addr)) {
-		send_reply(FTP_SYNT_ARG_ERR);
+		send_reply(client.control.sock, FTP_SYNT_ERR);
 		return (1);
 	}
 	comma = 0;
@@ -68,9 +68,9 @@ int data_port(char *arguments)
 		i++;
 	}
 	if (set_data_addr(addr, addr + i) < 0) {
-		send_reply(FTP_SYNT_ARG_ERR);
+		send_reply(client.control.sock, FTP_SYNT_ERR);
 		return (1);
 	}
-	send_reply(FTP_SYNT_OK);
+	send_reply(client.control.sock, FTP_SYNT_CMD_OK, "PORT");
 	return (0);
 }

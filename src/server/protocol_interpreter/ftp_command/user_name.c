@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 06:40:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/25 13:27:41 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/06/03 19:31:49 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ int user_name(char *arguments)
 	client.user = NULL;
 	name = strtok(arguments, " ");
 	if (name == NULL || strtok(NULL, " ") != NULL) {
-		send_reply(FTP_SYNT_ARG_ERR);
+		send_reply(client.control.sock, FTP_SYNT_ERR);
 		return (1);
 	}
 	pw = getpwnam(name);
 	if (pw == NULL || pw->pw_uid == 0) {
-		send_reply(FTP_AUTH_USER_ERR);
+		send_reply(client.control.sock, FTP_AUTH_ERR);
 		return (1);
 	}
 	if (chdir(pw->pw_dir) < 0) {
@@ -43,6 +43,6 @@ int user_name(char *arguments)
 		die();
 	}
 	client.user = pw;
-	send_reply(FTP_AUTH_USER_OK);
+	send_reply(client.control.sock, FTP_AUTH_OK);
 	return (0);
 }

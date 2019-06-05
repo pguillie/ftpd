@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:30:37 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/25 11:23:50 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/06/05 21:21:32 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ struct ftp_client client;
 
 int dtp_list(const char *file)
 {
-	int pipefd[2], ret;
+	int pipefd[2], ret, success;
 	pid_t ls;
 
 	if (pipe(pipefd) < 0)
-		return (2);
+		return (FTP_FILE_LOCAL_ERR);
 	ls = fork();
 	if (ls < 0) {
 		return (1);
@@ -30,12 +30,14 @@ int dtp_list(const char *file)
 		dup2(pipefd[1], 1);
 		dup2(pipefd[1], 2);
 		if (execl("/bin/ls", "/bin/ls", "-l", file, NULL))
-			return (2);
+			exit(FTP_FILE_LOCAL_ERR);
 	}
 	close(pipefd[1]);
-	send_data(pipefd[0]);
+	success = send_data(client.data.sock, pipefd[0]);
 	wait4(ls, &ret, 0, NULL);
-	if (WIFEXITED(ret))
-		return (WEXITSTATUS(ret));
-	return (2);
+	if (success < 0)
+		return (FTP_CONN_ABORT_ERR);
+	if (!WIFEXITED(ret))
+		return (FTP_FILE_LOCAL_ERR);
+	return (FTP_CONN_DATA_CLOSE);
 }

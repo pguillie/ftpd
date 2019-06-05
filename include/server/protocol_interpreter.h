@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/26 07:40:07 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/25 16:57:43 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/06/05 20:31:23 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,17 @@
 # include <sys/wait.h>
 # include <arpa/inet.h>
 # include <signal.h>
+# include <stdarg.h>
 # include <pwd.h>
 # include <unistd.h>
-# include <stdlib.h> // atoi
 # include <stdio.h>
 # include <fcntl.h>
-# include <string.h> // remove
 # include <limits.h>
 # include <ctype.h>
 
 # include "../libft/include/libft.h"
-# include "replies.h"
 # include "ftp_command.h"
+# include "ftp_reply.h"
 
 # define EOL "\r\n"
 # define EOL_LENGTH (2)
@@ -52,18 +51,18 @@ enum e_dtp_type {
 
 int server(const char *port);
 int protocol_interpreter(struct connected_socket control);
-int recv_command(char *command, size_t commandsz);
-int send_reply(const char *reply);
-int ftp_exec(const char *command, char *arguments);
+int recv_command(int control_sock, char *command, size_t commandsz);
+int send_reply(int control_sock, enum ftp_reply_code rep_idx, ...);
+int execute(const char *command, char *arguments);
 void die(void);
 
-pid_t data_transfer_process(enum e_dtp_type id, const char *file);
+int data_transfer_process(enum e_dtp_type id, const char *file);
 int dtp_retr(const char *file);
 int dtp_stor(const char *file);
 int dtp_list(const char *file);
 
-void recv_data(int fd);
-void send_data(int fd);
+int recv_data(int data_sock, int fd);
+int send_data(int data_sock, int fd);
 
 extern struct ftp_client client;
 

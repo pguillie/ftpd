@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/11 11:21:26 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/23 16:35:46 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/06/04 11:59:36 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ struct ftp_client client;
 
 void die(void)
 {
-	send_reply(FTP_CONN_CTRL_ERR);
+	send_reply(client.control.sock, FTP_CONN_CTRL_ERR);
 	close(client.control.sock);
 	exit(EXIT_FAILURE);
 }
