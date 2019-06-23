@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:28:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/23 16:44:19 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/06/23 13:11:04 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,6 @@ int store(char *arguments);
 int print_working_directory(char *arguments);
 int list(char *arguments);
 int system_type(char *arguments);
+int noop(char *arguments);
 
 #endif /* FTP_COMMAND_H */

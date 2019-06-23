@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/06/01 11:23:20 by pguillie         ###   ########.fr        #
+#    Updated: 2019/06/23 12:56:54 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -46,6 +46,7 @@ server_src = $(addprefix server/, \
 			print_working_directory.c \
 			list.c \
 			system_type.c \
+			noop.c \
 		) \
 	) \
 	$(addprefix data_transfer_process/, \

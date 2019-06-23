@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 15:46:43 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/05 21:13:52 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/06/23 12:47:33 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ const char * const ftp_reply_message[] = {
 	[FTP_CONN_ABORT_ERR] = "426 Connection closed, transfer aborted.",
 	[FTP_AUTH_OK] = "230 User logged in, proceed.",
 	[FTP_AUTH_ERR] = "530 Not logged in.",
-	[FTP_FILE_RETR_OPEN] = "150 Initiating file retrieval.",//retrieval?
-	[FTP_FILE_STOR_OPEN] = "150 Initiating file storage.",
-	[FTP_FILE_LIST_OPEN] = "150 Initiating directory listing.",
+	[FTP_FILE_RETR_OPEN] = "150 Preparing file retrieval.",//retrieval
+	[FTP_FILE_STOR_OPEN] = "150 Preparing file storage.",
+	[FTP_FILE_LIST_OPEN] = "150 Preparing directory listing.",
 	[FTP_FILE_CWD_OK] = "250 Working directory changed.",
 	[FTP_FILE_PWD_OK] = "257 \"*\"",
 	[FTP_FILE_LIST_ERR] = "450 Unable to list directory.",
