@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/05 21:10:41 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/06/23 13:59:39 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int protocol_interpreter(struct connected_socket control)
 	client.user = NULL;
 	client.control = control;
 	client.data.addr = control.addr;
+	client.binary = 0;
 	if (signal(SIGCHLD, dtp_exit_status) == SIG_ERR)
 		return (2);
 	send_reply(client.control.sock, FTP_CONN_CTRL_READY);

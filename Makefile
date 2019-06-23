@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/06/23 12:56:54 by pguillie         ###   ########.fr        #
+#    Updated: 2019/06/23 14:00:04 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -41,6 +41,7 @@ server_src = $(addprefix server/, \
 			change_working_directory.c \
 			logout.c \
 			data_port.c \
+			representation_type.c \
 			retrieve.c \
 			store.c \
 			print_working_directory.c \

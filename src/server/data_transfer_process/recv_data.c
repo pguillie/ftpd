@@ -6,13 +6,29 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/25 11:55:38 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/05 20:54:28 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/06/23 14:35:33 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server/protocol_interpreter.h"
 
-int recv_data(int data_sock, int fd)
+struct ftp_client client;
+
+static int recv_data_bin(int data_sock, int fd)
+{
+	char buf[1024];
+	ssize_t n;
+
+	while ((n = recv(data_sock, buf, sizeof(buf), MSG_NOSIGNAL)) > 0) {
+		if (write(fd, buf, n) < 0)
+			return (-1);
+	}
+	if (n < 0)
+		return (-1);
+	return (0);
+}
+
+static int recv_data_asc(int data_sock, int fd)
 {
 	char buf[1024], data[1024];
 	ssize_t n;
@@ -21,7 +37,7 @@ int recv_data(int data_sock, int fd)
 
 	cr = 0;
 	i = 0;
-	while ((n = recv(data_sock, data, sizeof(data), 0)) > 0) {
+	while ((n = recv(data_sock, data, sizeof(data), MSG_NOSIGNAL)) > 0) {
 		j = 0;
 		while (j < (size_t)n) {
 			buf[(cr && data[j] != '\n' ? ++i : i)] = data[j];
@@ -38,9 +54,15 @@ int recv_data(int data_sock, int fd)
 			}
 		}
 	}
-	if (n < 0)
-		return (-1);
-	if (i && write(fd, buf, i) < 0)
+	if (n < 0 || (i && write(fd, buf, i) < 0))
 		return (-1);
 	return (0);
+}
+
+int recv_data(int data_sock, int fd)
+{
+	if (client.binary)
+		return (recv_data_bin(data_sock, fd));
+	else
+		return (recv_data_asc(data_sock, fd));
 }

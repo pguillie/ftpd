@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:28:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/23 13:11:04 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/06/23 13:19:30 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int logout(char *arguments);
 /* TRANSFER PARAMETER COMMANDS */
 
 int data_port(char *arguments);
+int representation_type(char *arguments);
 
 /* FTP SERVICE COMMANDS */
 

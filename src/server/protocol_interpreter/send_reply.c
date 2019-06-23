@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 15:46:43 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/23 12:47:33 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/06/23 14:09:23 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ const char * const ftp_reply_message[] = {
 	[FTP_SYNT_CMD_OK] = "200 * command successfull.",
 	[FTP_SYNT_ERR] = "500 Syntax error.",
 	[FTP_SYNT_TOO_LONG] = "500 Command line too long.",
+	[FTP_SYNT_NOT_IMPL] = "502 Command not implemented.",
+	[FTP_SYNT_NOT_IMPL_PARA] = "504 Command not implemented for that parameter.",
 	[FTP_INFO_SYS_TYPE] = "215 * system type.",
 	[FTP_CONN_CTRL_READY] = "220 Service ready for new user.",
 	[FTP_CONN_CTRL_CLOSE] = "221 Service closing control connection.",
