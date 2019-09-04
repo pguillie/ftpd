@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/server.h"
-#include "server/protocol_interpreter.h"
+#include "server.h"
+#include "protocol_interpreter.h"
 
 static void child_handler(int sig __attribute__((unused)))
 {

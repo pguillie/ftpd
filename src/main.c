@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   die.c                                              :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/11 11:21:26 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/04 11:59:36 by pguillie         ###   ########.fr       */
+/*   Created: 2019/04/27 12:33:19 by pguillie          #+#    #+#             */
+/*   Updated: 2019/05/10 17:05:55 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/protocol_interpreter.h"
+#include "server.h"
 
-struct ftp_client client;
-
-void die(void)
+int main(int argc, char *argv[])
 {
-	send_reply(client.control.sock, FTP_CONN_CTRL_ERR);
-	close(client.control.sock);
-	exit(EXIT_FAILURE);
+	if (argc != 2) {
+		fprintf(stderr, "Usage: %s port\n", argv[0]);
+		return (1);
+	}
+	return (server(argv[1]));
 }

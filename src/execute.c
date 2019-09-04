@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/protocol_interpreter.h"
+#include "protocol_interpreter.h"
 
 //////
 struct ftp_client client;

@@ -1,27 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dtp_retr.c                                         :+:      :+:    :+:   */
+/*   noop.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/25 12:27:38 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/05 21:15:35 by pguillie         ###   ########.fr       */
+/*   Created: 2019/06/23 12:50:28 by pguillie          #+#    #+#             */
+/*   Updated: 2019/06/23 12:54:07 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/protocol_interpreter.h"
+#include "protocol_interpreter.h"
 
 struct ftp_client client;
 
-int dtp_retr(const char *file)
+int noop(char *arguments __attribute__((unused)))
 {
-	int fd;
-
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-		return (1);
-	if (send_data(client.data.sock, fd) < 0)
-		return (FTP_CONN_ABORT_ERR);
-	return (FTP_CONN_DATA_CLOSE);
+	send_reply(client.control.sock, FTP_SYNT_CMD_OK, "NOOP");
+	return (0);
 }

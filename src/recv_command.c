@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/protocol_interpreter.h"
+#include "protocol_interpreter.h"
 
 static int copy_line(char *line, size_t size, char *buf, size_t n)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "server/protocol_interpreter.h"
+#include "protocol_interpreter.h"
 
 const char * const ftp_reply_message[] = {
 	[FTP_SYNT_OK] = "200 Command okay.",
