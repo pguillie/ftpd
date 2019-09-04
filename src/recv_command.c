@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 05:13:33 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/04 11:56:19 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/04 10:05:50 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int copy_line(char *line, size_t size, char *buf, size_t n)
 {
 	if (n > size - 1)
 		return (1);
-	memcpy(line, buf, n);
+	ft_memcpy(line, buf, n);
 	line[n] = '\0';
 	return (0);
 }
@@ -46,6 +46,6 @@ int recv_command(int control_sock, char *line, size_t size)
 	if (!overflow)
 		overflow = copy_line(line + i, size - i, buf, nl - buf);
 	n = buf + n - (nl + 2);
-	memmove(buf, nl + 2, n);
+	ft_memmove(buf, nl + 2, n);
 	return (overflow ? 2 : 1);
 }

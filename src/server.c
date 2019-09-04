@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 09:09:49 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/30 17:31:09 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/04 10:06:18 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int server(const char *port)
 			fprintf(stderr, "Error: accept\n");
 		pi = fork();
 		if (pi < 0) {
-			send_reply(client.control.sock, FTP_SYNT_OK);//FTP_CONN_CTRL_ERR);
+			send_reply(client.control.sock, FTP_CONN_CTRL_ERR);
 		} else if (pi == 0) {
 			close(lsock);
 			ret = protocol_interpreter(control);
