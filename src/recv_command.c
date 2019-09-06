@@ -6,22 +6,23 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/02 05:13:33 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/04 10:05:50 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/12 06:12:40 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "protocol_interpreter.h"
+#include "../libft/include/libft.h"
 
 static int copy_line(char *line, size_t size, char *buf, size_t n)
 {
 	if (n > size - 1)
-		return (1);
+		return 1;
 	ft_memcpy(line, buf, n);
 	line[n] = '\0';
-	return (0);
+	return 0;
 }
 
-int recv_command(int control_sock, char *line, size_t size)
+int recv_command(int sock, char *line, size_t size)
 {
 	static char buf[1024];
 	static ssize_t n;
@@ -35,12 +36,12 @@ int recv_command(int control_sock, char *line, size_t size)
 		if (!overflow)
 			overflow = copy_line(line + i, size - i, buf, n);
 		i += n;
-		n = read(control_sock, buf, sizeof(buf));
+		n = recv(sock, buf, sizeof(buf), 0);
 		if (n < 0) {
 			n = 0;
-			return (-1);
+			return -1;
 		} else if (n == 0) {
-			return (0);
+			return 0;
 		}
 	}
 	if (!overflow)

@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/09/03 11:27:29 by pguillie         ###   ########.fr        #
+#    Updated: 2019/09/10 14:41:59 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -30,21 +30,22 @@ sources =					\
 	main.c					\
 	server.c				\
 	protocol_interpreter.c			\
-	execute.c				\
+	set_command.c				\
 	recv_command.c				\
 	send_reply.c				\
+	close_session.c				\
 	die.c					\
-	user_name.c				\
-	change_working_directory.c		\
-	logout.c				\
-	data_port.c				\
-	representation_type.c			\
-	retrieve.c				\
-	store.c					\
-	print_working_directory.c		\
-	list.c					\
-	system_type.c				\
-	noop.c					\
+	ftp_user.c				\
+	ftp_cwd.c				\
+	ftp_quit.c				\
+	ftp_port.c				\
+	ftp_type.c				\
+	ftp_retr.c				\
+	ftp_stor.c				\
+	ftp_pwd.c				\
+	ftp_list.c				\
+	ftp_syst.c				\
+	ftp_noop.c				\
 	data_transfer_process.c			\
 	dtp_retr.c				\
 	dtp_stor.c				\

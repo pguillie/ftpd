@@ -6,31 +6,33 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:28:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/23 13:19:30 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/12 06:12:11 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FTP_COMMAND_H
 # define FTP_COMMAND_H
 
+# include "ftp_struct.h"
+
 /* ACCESS CONTROL COMMANDS */
 
-int user_name(char *arguments);
-int change_working_directory(char *arguments);
-int logout(char *arguments);
+int ftp_user(struct ftp_session *session);
+int ftp_cwd(struct ftp_session *session);
+int ftp_quit(struct ftp_session *session);
 
 /* TRANSFER PARAMETER COMMANDS */
 
-int data_port(char *arguments);
-int representation_type(char *arguments);
+int ftp_port(struct ftp_session *session);
+int ftp_type(struct ftp_session *session);
 
 /* FTP SERVICE COMMANDS */
 
-int retrieve(char *arguments);
-int store(char *arguments);
-int print_working_directory(char *arguments);
-int list(char *arguments);
-int system_type(char *arguments);
-int noop(char *arguments);
+int ftp_retr(struct ftp_session *session);
+int ftp_stor(struct ftp_session *session);
+int ftp_pwd(struct ftp_session *session);
+int ftp_list(struct ftp_session *session);
+int ftp_syst(struct ftp_session *session);
+int ftp_noop(struct ftp_session *session);
 
 #endif /* FTP_COMMAND_H */

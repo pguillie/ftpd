@@ -6,29 +6,15 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/24 10:49:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/23 14:19:21 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/12 06:30:03 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "protocol_interpreter.h"
+#include <unistd.h>
 
-struct ftp_client client;
+#include "data_transfer_process.h"
 
-static int send_data_bin(int data_sock, int fd)
-{
-	char buf[1024];
-	ssize_t n;
-
-	while ((n = read(fd, buf, sizeof(buf))) > 0) {
-		if (send(data_sock, buf, n, MSG_NOSIGNAL) < 0)
-			return (-1);
-	}
-	if (n < 0)
-		return (-1);
-	return (0);
-}
-
-static int send_data_asc(int data_sock, int fd)
+static int send_data_asc(int sock, int fd)
 {
 	char buf[1024], data[1024];
 	ssize_t n;
@@ -48,21 +34,35 @@ static int send_data_asc(int data_sock, int fd)
 				cr = 0;
 			}
 			if (i == sizeof(data)) {
-				if (send(data_sock, data, i, MSG_NOSIGNAL) < 0)
-					return (-1);
+				if (send(sock, data, i, MSG_NOSIGNAL) < 0)
+					return -1;
 				i = 0;
 			}
 		}
 	}
-	if (n < 0 || ((i && send(data_sock, data, i, MSG_NOSIGNAL) < 0)))
-		return (-1);
-	return (0);
+	if (n < 0 || ((i && send(sock, data, i, MSG_NOSIGNAL) < 0)))
+		return -1;
+	return 0;
 }
 
-int send_data(int data_sock, int fd)
+static int send_data_bin(int sock, int fd)
 {
-	if (client.binary)
-		return (send_data_bin(data_sock, fd));
+	char buf[1024];
+	ssize_t n;
+
+	while ((n = read(fd, buf, sizeof(buf))) > 0) {
+		if (send(sock, buf, n, MSG_NOSIGNAL) < 0)
+			return -1;
+	}
+	if (n < 0)
+		return -1;
+	return 0;
+}
+
+int send_data(int sock, int fd, enum ftp_data_type type)
+{
+	if (type == TYPE_ASCII)
+		return send_data_asc(sock, fd);
 	else
-		return (send_data_asc(data_sock, fd));
+		return send_data_bin(sock, fd);
 }

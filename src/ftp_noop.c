@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   die.c                                              :+:      :+:    :+:   */
+/*   ftp_noop.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/11 11:21:26 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 06:15:13 by pguillie         ###   ########.fr       */
+/*   Created: 2019/06/23 12:50:28 by pguillie          #+#    #+#             */
+/*   Updated: 2019/09/08 12:57:13 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-
 #include "protocol_interpreter.h"
 
-void die(struct ftp_session *session)
+int ftp_noop(struct ftp_session *session)
 {
-	send_reply(session->control.sock, FTP_CONN_CTRL_ERR);
-	close_session(session);
-	exit(EXIT_FAILURE);
+	send_reply(session->control.sock, FTP_SYNT_CMD_OK, "NOOP");
+	return 0;
 }

@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   store.c                                            :+:      :+:    :+:   */
+/*   ftp_syst.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/25 13:12:38 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/05 21:36:58 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/16 14:41:08 by pguillie          #+#    #+#             */
+/*   Updated: 2019/09/08 12:57:05 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "protocol_interpreter.h"
 
-struct ftp_client client;
-
-int store(char *file)
+int ftp_syst(struct ftp_session *session)
 {
-	if (!client.user) {
-		send_reply(client.control.sock, FTP_AUTH_ERR);
-		return (1);
-	}
-	/* if (access(file, R_OK) != 0) { */
-	/* 	send_reply(client.control.sock, FTP_FILE_ERR); */
-	/* 	return (1); */
-	/* } */
-	send_reply(client.control.sock, FTP_FILE_STOR_OPEN);
-	return (data_transfer_process(DTP_STOR, file));
+	send_reply(session->control.sock, FTP_INFO_SYS_TYPE, "UNIX");
+	return 0;
 }

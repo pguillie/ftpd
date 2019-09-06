@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   system_type.c                                      :+:      :+:    :+:   */
+/*   dtp.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/16 14:41:08 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/03 20:44:51 by pguillie         ###   ########.fr       */
+/*   Created: 2019/09/11 10:41:30 by pguillie          #+#    #+#             */
+/*   Updated: 2019/09/11 10:46:20 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "protocol_interpreter.h"
+#ifndef DTP_H
+# define DTP_H
 
-int system_type(char *arguments __attribute__((unused)))
-{
-	send_reply(client.control.sock, FTP_INFO_SYS_TYPE, "UNIX");
-	return (0);
-}
+extern pid_t dtp;		/* data transfer process id */
+
+#endif /* DTP_H */

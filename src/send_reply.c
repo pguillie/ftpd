@@ -6,11 +6,16 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 15:46:43 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/23 14:09:23 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/12 07:45:43 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
+#include <stdarg.h>
+
 #include "protocol_interpreter.h"
+#include "ftp_reply.h"
+#include "../libft/include/libft.h"
 
 const char * const ftp_reply_message[] = {
 	[FTP_SYNT_OK] = "200 Command okay.",
@@ -29,7 +34,7 @@ const char * const ftp_reply_message[] = {
 	[FTP_CONN_ABORT_ERR] = "426 Connection closed, transfer aborted.",
 	[FTP_AUTH_OK] = "230 User logged in, proceed.",
 	[FTP_AUTH_ERR] = "530 Not logged in.",
-	[FTP_FILE_RETR_OPEN] = "150 Preparing file retrieval.",//retrieval
+	[FTP_FILE_RETR_OPEN] = "150 Preparing file retrieval.",
 	[FTP_FILE_STOR_OPEN] = "150 Preparing file storage.",
 	[FTP_FILE_LIST_OPEN] = "150 Preparing directory listing.",
 	[FTP_FILE_CWD_OK] = "250 Working directory changed.",
@@ -42,40 +47,40 @@ const char * const ftp_reply_message[] = {
 	[FTP_FILE_PWD_ERR] = "550 Working directory unavailable."
 };
 
-static int reply_out(int control_sock, struct reply_buffer *rep)
+static int reply_out(int sock, struct reply_buffer *rep)
 {
 	ft_memcpy(rep->buf + rep->i, "\r\n", 2);
-	if (send(control_sock, rep->buf, rep->i + 2, 0) < 0)
-		return (-1);
+	if (send(sock, rep->buf, rep->i + 2, 0) < 0)
+		return -1;
 	ft_memset(rep->buf, ' ', 4);
 	rep->i = 4;
-	return (0);
+	return 0;
 }
 
-static int reply_in(int control_sock, struct reply_buffer *rep, char c)
+static int reply_in(int sock, struct reply_buffer *rep, char c)
 {
 	if (rep->i == sizeof(rep->buf) - 2) {
 		if (rep->hyphen) {
 			rep->buf[3] = '-';
 			rep->hyphen = 0;
 		}
-		if (reply_out(control_sock, rep) < 0)
-			return (-1);
+		if (reply_out(sock, rep) < 0)
+			return -1;
 	}
 	rep->buf[rep->i++] = c;
-	return (0);
+	return 0;
 }
 
-static int reply_arg(int control_sock, struct reply_buffer *rep,
+static int reply_arg(int sock, struct reply_buffer *rep,
 	const char *arg)
 {
 	while (*arg)
-		if (reply_in(control_sock, rep, *arg++) < 0)
-			return (-1);
-	return (0);
+		if (reply_in(sock, rep, *arg++) < 0)
+			return -1;
+	return 0;
 }
 
-int send_reply(int control_sock, enum ftp_reply_code rep_idx, ...)
+int send_reply(int sock, enum ftp_reply_code rep_idx, ...)
 {
 	va_list ap;
 	const char *rep_msg;
@@ -87,16 +92,16 @@ int send_reply(int control_sock, enum ftp_reply_code rep_idx, ...)
 	rep.hyphen = 1;
 	while (*rep_msg) {
 		if (*rep_msg == '*'
-			? reply_arg(control_sock, &rep, va_arg(ap, char *)) < 0
-			: reply_in(control_sock, &rep, *rep_msg) < 0) {
+			? reply_arg(sock, &rep, va_arg(ap, char *)) < 0
+			: reply_in(sock, &rep, *rep_msg) < 0) {
 			write(1, "exit\n", 6);
-			return (-1);
+			return -1;
 		}
 		rep_msg++;
 	}
 	ft_memcpy(rep.buf, ftp_reply_message[rep_idx], 3);
-	if (reply_out(control_sock, &rep) < 0)
-		return (-1);
+	if (reply_out(sock, &rep) < 0)
+		return -1;
 	va_end(ap);
-	return (0);
+	return 0;
 }

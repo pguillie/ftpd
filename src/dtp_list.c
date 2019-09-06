@@ -6,38 +6,44 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:30:37 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/05 21:21:32 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/12 06:29:27 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "protocol_interpreter.h"
+#include <sys/wait.h>
+#include <unistd.h>
+#include <stdlib.h>
 
-struct ftp_client client;
+#include "data_transfer_process.h"
+#include "ftp_reply.h"
 
-int dtp_list(const char *file)
+#define LS	"/bin/ls"
+#define LS_OPT	"-l"
+
+int dtp_list(struct ftp_session *session)
 {
 	int pipefd[2], ret, success;
 	pid_t ls;
 
 	if (pipe(pipefd) < 0)
-		return (FTP_FILE_LOCAL_ERR);
+		return FTP_FILE_LOCAL_ERR;
 	ls = fork();
 	if (ls < 0) {
-		return (1);
+		return 1;
 	} else if (ls == 0) {
 		close(pipefd[0]);
-		close(client.data.sock);
+		close(session->data.sock);
 		dup2(pipefd[1], 1);
 		dup2(pipefd[1], 2);
-		if (execl("/bin/ls", "/bin/ls", "-l", file, NULL))
+		if (execl(LS, LS, LS_OPT, session->args, NULL))
 			exit(FTP_FILE_LOCAL_ERR);
 	}
 	close(pipefd[1]);
-	success = send_data(client.data.sock, pipefd[0]);
+	success = send_data(session->data.sock, pipefd[0], session->data_type);
 	wait4(ls, &ret, 0, NULL);
 	if (success < 0)
-		return (FTP_CONN_ABORT_ERR);
+		return FTP_CONN_ABORT_ERR;
 	if (!WIFEXITED(ret))
-		return (FTP_FILE_LOCAL_ERR);
-	return (FTP_CONN_DATA_CLOSE);
+		return FTP_FILE_LOCAL_ERR;
+	return FTP_CONN_DATA_CLOSE;
 }

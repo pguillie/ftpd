@@ -1,39 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_dtp.h                                       :+:      :+:    :+:   */
+/*   data_transfer_process.h                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/20 12:53:25 by pguillie          #+#    #+#             */
-/*   Updated: 2019/05/21 13:26:21 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/12 06:30:28 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER_DTP_H
-# define SERVER_DTP_H
+#ifndef DATA_TRANSFER_PROCESS_H
+# define DATA_TRANSFER_PROCESS_H
 
-# include <sys/socket.h>
-# include <sys/wait.h>
-# include <arpa/inet.h>
-# include <signal.h>
-# include <pwd.h>
-# include <unistd.h>
-# include <stdlib.h> // atoi
-# include <stdio.h>
-# include <fcntl.h>
-# include <string.h> // remove
-# include <limits.h>
-# include <ctype.h>
+# include "ftp_struct.h"
 
-void transfer_function(const char *transfer);
+int data_transfer_process(struct ftp_session *session);
+int dtp_retr(struct ftp_session *session);
+int dtp_stor(struct ftp_session *session);
+int dtp_list(struct ftp_session *session);
 
-int dtp_port(const char *sockaddr);
-int dtp_list(const char *path);
+int recv_data(int sock, int fd, enum ftp_data_type type);
+int send_data(int sock, int fd, enum ftp_data_type type);
 
-int connect_dtp(void);
-void close_dtp(int data_sock);
-
-extern struct sockaddr_in client_dtp;
-
-#endif /* SERVER_DTP_H */
+#endif /* DATA_TRANSFER_PROCESS_H */

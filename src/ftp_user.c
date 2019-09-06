@@ -1,48 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   user_name.c                                        :+:      :+:    :+:   */
+/*   ftp_user.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 06:40:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/03 19:31:49 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/12 08:07:31 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <pwd.h>
+#include <unistd.h>
+
+#include <stdio.h> //perror
+
 #include "protocol_interpreter.h"
+#include "../libft/include/libft.h"
 
-struct ftp_client client;
-
-int user_name(char *arguments)
+int ftp_user(struct ftp_session *session)
 {
 	char *name;
 	struct passwd *pw;
 
-	client.user = NULL;
-	name = strtok(arguments, " ");
-	if (name == NULL || strtok(NULL, " ") != NULL) {
-		send_reply(client.control.sock, FTP_SYNT_ERR);
-		return (1);
+	session->user = NULL;
+	name = ft_strtok(session->args, " ");
+	if (name == NULL || ft_strtok(NULL, " ") != NULL) {
+		send_reply(session->control.sock, FTP_SYNT_ERR);
+		return 1;
 	}
 	pw = getpwnam(name);
 	if (pw == NULL || pw->pw_uid == 0) {
-		send_reply(client.control.sock, FTP_AUTH_ERR);
-		return (1);
-	}
-	if (chdir(pw->pw_dir) < 0) {
-		perror("chdir");
-		die();
+		send_reply(session->control.sock, FTP_AUTH_ERR);
+		return 1;
 	}
 	if (setgid(pw->pw_gid) < 0) {
 		perror("setgid");
-		die();
+		die(session);
 	}
 	if (setuid(pw->pw_uid) < 0) {
 		perror("setuid");
-		die();
+		die(session);
 	}
-	client.user = pw;
-	send_reply(client.control.sock, FTP_AUTH_OK);
-	return (0);
+	if (chdir(pw->pw_dir) < 0) {
+		perror("chdir");
+		die(session);
+	}
+	session->user = pw;
+	send_reply(session->control.sock, FTP_AUTH_OK);
+	return 0;
 }

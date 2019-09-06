@@ -6,62 +6,60 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:07:39 by pguillie          #+#    #+#             */
-/*   Updated: 2019/06/05 21:10:26 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/12 06:27:19 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/socket.h>
+#include <signal.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+#include <stdio.h> //perror
+
 #include "protocol_interpreter.h"
-//
-struct ftp_client client;
-//
+#include "ftp_reply.h"
+#include "dtp.h"
+
 pid_t dtp;
 
-typedef int (*dtp_function)(const char *file);
-
-dtp_function dtp_command[] = {
-	[DTP_RETR] = &dtp_retr,
-	[DTP_STOR] = &dtp_stor,
-	[DTP_LIST] = &dtp_list
-};
-
-static int connect_data(struct sockaddr_in data_sockaddr)
+static int connect_data(struct sockaddr_in addr)
 {
-	int data_sock;
+	int sock;
 
-	data_sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (data_sock < 0) {
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (sock < 0) {
 		perror("Error: dtp socket");
-		return (-1);
+		return -1;
 	}
-	if (connect(data_sock, (struct sockaddr *)&(data_sockaddr),
-			sizeof(data_sockaddr)) < 0) {
+	if (connect(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
 		perror("Error: dtp connect");
-		return (-1);
+		return -1;
 	}
-	return (data_sock);
+	return sock;
 }
 
-int data_transfer_process(enum e_dtp_type id, const char *file)
+int data_transfer_process(struct ftp_session *session)
 {
 	int ret;
 
 	if (dtp >= 0) {
-		send_reply(client.control.sock, FTP_FILE_TRANSFR_ERR);
-		return (-1);
+		send_reply(session->control.sock, FTP_FILE_TRANSFR_ERR);
+		return -1;
 	}
 	dtp = fork();
 	if (dtp < 0) {
 		fprintf(stderr, "Error: DTP fork\n");
-		send_reply(client.control.sock, FTP_FILE_LOCAL_ERR);
-		return (-1);
+		send_reply(session->control.sock, FTP_FILE_LOCAL_ERR);
+		return -1;
 	} else if (dtp == 0) {
 		if (signal(SIGCHLD, SIG_DFL) == SIG_ERR)
 			exit(FTP_FILE_LOCAL_ERR);
-		client.data.sock = connect_data(client.data.addr);
-		if (client.data.sock < 0)
+		session->data.sock = connect_data(session->data.addr);
+		if (session->data.sock < 0)
 			exit(FTP_CONN_DATA_ERR);
-		ret = dtp_command[id](file);
+		ret = session->command(session);
 		exit(ret);
 	}
-	return (0);
+	return 0;
 }

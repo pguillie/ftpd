@@ -1,22 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   die.c                                              :+:      :+:    :+:   */
+/*   ftp_retr                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/11 11:21:26 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 06:15:13 by pguillie         ###   ########.fr       */
+/*   Created: 2019/05/25 11:58:36 by pguillie          #+#    #+#             */
+/*   Updated: 2019/09/12 06:24:08 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <unistd.h>
 
 #include "protocol_interpreter.h"
+#include "data_transfer_process.h"
 
-void die(struct ftp_session *session)
+int ftp_retr(struct ftp_session *session)
 {
-	send_reply(session->control.sock, FTP_CONN_CTRL_ERR);
-	close_session(session);
-	exit(EXIT_FAILURE);
+	if (!session->user) {
+		send_reply(session->control.sock, FTP_AUTH_ERR);
+		return 1;
+	}
+	if (access(session->args, R_OK) != 0) {
+		send_reply(session->control.sock, FTP_FILE_ERR);
+		return 1;
+	}
+	session->command = &dtp_retr;
+	send_reply(session->control.sock, FTP_FILE_RETR_OPEN);
+	return data_transfer_process(session);
 }
