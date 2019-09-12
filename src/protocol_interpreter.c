@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 08:01:53 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/12 10:55:29 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,30 @@ int protocol_interpreter(int sock, struct sockaddr_in addr)
 	struct ftp_session session;
 	char line[128];
 	int ret;
+	pid_t user;
 
 	if (init_session(&session, sock, addr) < 0)
 		die(&session);
-	while ((ret = recv_command(session.control.sock, line,
-				sizeof(line))) > 0) {
-		if (ret > 1) {
-			send_reply(session.control.sock, FTP_SYNT_TOO_LONG);
-			continue ;
+	// signal isn't right
+	user = fork();
+	if (user < 0) {
+		fprintf("ERROR\n");
+		return -1;
+	} else if (user == 0) {
+		while ((ret = recv_command(session.control.sock, line,
+					sizeof(line))) > 0) {
+			if (ret > 1) {
+				send_reply(session.control.sock, FTP_SYNT_TOO_LONG);
+				continue ;
+			}
+			if (set_command(&session, line) != 0)
+				send_reply(session.control.sock, FTP_SYNT_ERR);
+			else if (session.command(&session) < 0)
+				die(&session);
 		}
-		if (set_command(&session, line) != 0)
-			send_reply(session.control.sock, FTP_SYNT_ERR);
-		else if (session.command(&session) < 0)
-			die(&session);
+		close_session(&session);
+	} else {
+		// something smart
 	}
-	close_session(&session);
 	return (ret == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
 }

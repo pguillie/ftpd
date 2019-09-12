@@ -6,12 +6,13 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 06:40:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 08:07:31 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/12 10:52:05 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pwd.h>
 #include <unistd.h>
+#include <grp.h>
 
 #include <stdio.h> //perror
 
@@ -34,18 +35,11 @@ int ftp_user(struct ftp_session *session)
 		send_reply(session->control.sock, FTP_AUTH_ERR);
 		return 1;
 	}
-	if (setgid(pw->pw_gid) < 0) {
-		perror("setgid");
+	if (setgid(pw->pw_gid) < 0
+		|| initgroups(pw->pw_name, pw->pw_gid) < 0
+		|| setuid(pw->pw_uid) < 0
+		|| chdir(pw->pw_dir) < 0)
 		die(session);
-	}
-	if (setuid(pw->pw_uid) < 0) {
-		perror("setuid");
-		die(session);
-	}
-	if (chdir(pw->pw_dir) < 0) {
-		perror("chdir");
-		die(session);
-	}
 	session->user = pw;
 	send_reply(session->control.sock, FTP_AUTH_OK);
 	return 0;
