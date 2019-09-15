@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/08 10:54:58 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 06:15:15 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/15 11:43:25 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,6 @@
 void close_session(struct ftp_session *session)
 {
 	close(session->control.sock);
+	close(session->pipefd);
 	/* ... */
 }

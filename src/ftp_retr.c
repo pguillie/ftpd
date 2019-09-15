@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/25 11:58:36 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 06:24:08 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/15 14:41:59 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 int ftp_retr(struct ftp_session *session)
 {
-	if (!session->user) {
+	if (!session->user.pw_uid) {
 		send_reply(session->control.sock, FTP_AUTH_ERR);
 		return 1;
 	}
