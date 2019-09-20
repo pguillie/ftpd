@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/15 15:03:48 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/20 17:23:34 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,20 +69,9 @@ static int init_session(struct ftp_session *session, int sock,
 static int log_user(struct ftp_session *session)
 {
 	printf("log user %s\n", session->user.pw_name);
-////////
-	if (setgid(session->user.pw_gid) < 0)
-		perror("setgid");
-	if (initgroups(session->user.pw_name, session->user.pw_gid) < 0){
-		perror("initgroups");
-		printf("%s, %d\n", session->user.pw_name, session->user.pw_gid);
-	}
-	if (setuid(session->user.pw_uid) < 0)
-		perror("setuid");
-////////
-// GET DTP ERROR REPLY WHEN LOGING
 	if (session->user.pw_uid == 0 || session->user.pw_gid == 0
 		|| setgid(session->user.pw_gid) < 0
-//		|| initgroups(session->user.pw_name, session->user.pw_gid) < 0
+		|| initgroups(session->user.pw_name, session->user.pw_gid) < 0
 		|| setuid(session->user.pw_uid) < 0) {
 		ft_memset(&(session->user), 0, sizeof(session->user));
 		send_reply(session->control.sock, FTP_AUTH_ERR);
@@ -118,15 +107,16 @@ int protocol_interpreter(int sock, struct sockaddr_in addr)
 			if (session.user.pw_uid != 0)
 				log_user(&session);
 			else
-				printf("USER NULL\n");
+				printf("user (null): no login\n");
 			while ((ret = recv_command(session.control.sock, line,
 						sizeof(line))) > 0) {
 				if (ret > 1) {
 					send_reply(session.control.sock, FTP_SYNT_TOO_LONG);
 					continue ;
 				}
-				system("id");
-				printf("TYPE = %d\n", session.data_type);
+				printf("command: %s\n", line);
+//				system("id");
+//				printf("TYPE = %d\n", session.data_type);
 				if (set_command(&session, line) != 0)
 					send_reply(session.control.sock, FTP_SYNT_ERR);
 				else if (session.command(&session) < 0)
@@ -141,7 +131,7 @@ int protocol_interpreter(int sock, struct sockaddr_in addr)
 				printf("Read more or less bytes than session's size!\n");
 				break ;
 			}
-			printf("received struct !\nUSER = %s\n", session.user.pw_name);
+			printf("received struct! USER = %s\n", session.user.pw_name);
 		}
 	}
 	close(pipefd);
