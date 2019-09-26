@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 09:09:49 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 08:01:39 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/26 11:54:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 static void child_handler(int sig __attribute__((unused)))
 {
 	wait4(-1, NULL, 0, NULL);
+	printf("SERVER: client process exited\n");
 }
 
 static int create_server(const char *port)

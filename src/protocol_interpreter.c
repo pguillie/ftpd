@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/20 17:23:34 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/26 12:49:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,29 +46,21 @@ static void dtp_exit_status(int sig __attribute__((unused)))
 		dtp_reply(-1, FTP_FILE_LOCAL_ERR);
 }
 
-static int init_session(struct ftp_session *session, int sock,
+static void init_session(struct ftp_session *session, int sock,
 	struct sockaddr_in addr)
 {
-	int pipefd[2];
-
-	if (pipe(pipefd) < 0) {
-		dtp_reply(sock, FTP_CONN_CTRL_ERR);
-		return -1;
-	}
 	session->control = (struct connection){addr, sock};
 	ft_memset(&(session->user), 0, sizeof(session->user));
 	ft_memset(&(session->data), 0, sizeof(session->data));
 	session->command = NULL;
 	session->args = NULL;
 	session->data_type = TYPE_ASCII;
-	session->pipefd = pipefd[1];
+	session->pipefd = -1;
 	dtp_reply(session->control.sock, FTP_CONN_CTRL_READY);
-	return pipefd[0];
 }
 
 static int log_user(struct ftp_session *session)
 {
-	printf("log user %s\n", session->user.pw_name);
 	if (session->user.pw_uid == 0 || session->user.pw_gid == 0
 		|| setgid(session->user.pw_gid) < 0
 		|| initgroups(session->user.pw_name, session->user.pw_gid) < 0
@@ -87,27 +79,27 @@ int protocol_interpreter(int sock, struct sockaddr_in addr)
 {
 	struct ftp_session session;
 	char line[128];
-	int ret, status, pipefd;
+	int ret, status, pipefd[2];
 	pid_t user;
 
-	pipefd = init_session(&session, sock, addr);
-	if (pipefd < 0) {
-		fprintf(stderr, "Error: pipe");
-		return -1;
-	}
+	init_session(&session, sock, addr);
+	if (signal(SIGCHLD, SIG_DFL) == SIG_ERR) /* sth more adapted */
+		exit(FTP_FILE_LOCAL_ERR);
 	while (1) {
 		printf("fork!\n");
+		if (pipe(pipefd) == -1)
+			die(&session);
 		user = fork();
 		if (user < 0) {
 			die(&session);
 		} else if (user == 0) {
-			close(pipefd);
+			close(pipefd[0]);
+			session.pipefd = pipefd[1];
 			if (signal(SIGCHLD, dtp_exit_status) == SIG_ERR)
 				die(&session);
+			printf("Log user: %s\n", session.user.pw_name);
 			if (session.user.pw_uid != 0)
 				log_user(&session);
-			else
-				printf("user (null): no login\n");
 			while ((ret = recv_command(session.control.sock, line,
 						sizeof(line))) > 0) {
 				if (ret > 1) {
@@ -115,8 +107,6 @@ int protocol_interpreter(int sock, struct sockaddr_in addr)
 					continue ;
 				}
 				printf("command: %s\n", line);
-//				system("id");
-//				printf("TYPE = %d\n", session.data_type);
 				if (set_command(&session, line) != 0)
 					send_reply(session.control.sock, FTP_SYNT_ERR);
 				else if (session.command(&session) < 0)
@@ -125,15 +115,18 @@ int protocol_interpreter(int sock, struct sockaddr_in addr)
 			close_session(&session);
 			exit(ret == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
 		} else {
+			close(pipefd[1]);
 			wait4(user, &status, 0, NULL);
-			if (read(pipefd, &session, sizeof(session) + 1)
+			printf("Child exited with status: %d\n", status);
+			if (read(pipefd[0], &session, sizeof(session) + 1)
 				!= sizeof(session)) {
 				printf("Read more or less bytes than session's size!\n");
 				break ;
 			}
+			close(pipefd[0]);
 			printf("received struct! USER = %s\n", session.user.pw_name);
 		}
 	}
-	close(pipefd);
+	close(pipefd[0]);
 	return (status == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
 }
