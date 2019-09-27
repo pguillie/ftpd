@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 09:09:49 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/26 11:54:36 by marvin           ###   ########.fr       */
+/*   Updated: 2019/09/27 11:48:20 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int server(const char *port)
 			send_reply(sock, FTP_CONN_CTRL_ERR);
 		} else if (pi == 0) {
 			close(lsock);
-			if (protocol_interpreter(sock, addr) != 0)
+			if (session_manager(sock, addr) != 0)
 				exit(EXIT_FAILURE);
 			exit(EXIT_SUCCESS);
 		}

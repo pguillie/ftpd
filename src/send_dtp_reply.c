@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.h                                           :+:      :+:    :+:   */
+/*   send_dtp_reply.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/20 16:14:14 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/27 11:48:57 by marvin           ###   ########.fr       */
+/*   Created: 2019/09/27 11:54:23 by marvin            #+#    #+#             */
+/*   Updated: 2019/09/27 12:02:28 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER_H
-# define SERVER_H
+#include "protocol_interpreter.h"
 
-int server(const char *port);
+void send_dtp_reply(int sock, enum ftp_reply_code rep_idx)
+{
+	static int _sock;
 
-#endif /* SERVER_H */
+	if (sock >= 0)
+		_sock = sock;
+	send_reply(_sock, rep_idx);
+}
