@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 16:58:46 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 06:11:24 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/28 12:34:03 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ struct reply_buffer {
 };
 
 enum ftp_reply_code {
+	FTP_SYNT_BAD_SEQ,
 	FTP_SYNT_CMD_OK,
 	FTP_SYNT_ERR,
 	FTP_SYNT_OK,
@@ -40,6 +41,8 @@ enum ftp_reply_code {
 	FTP_CONN_DATA_ERR,
 	FTP_AUTH_ERR,
 	FTP_AUTH_OK,
+	FTP_AUTH_PASS,
+	FTP_AUTH_USAGE,
 	FTP_FILE_CWD_ERR,
 	FTP_FILE_CWD_OK,
 	FTP_FILE_LOCAL_ERR,

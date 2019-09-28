@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 11:23:05 by marvin            #+#    #+#             */
-/*   Updated: 2019/09/27 11:59:45 by marvin           ###   ########.fr       */
+/*   Updated: 2019/09/28 10:30:39 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,10 @@
 static void init_session(struct ftp_session *session, int sock,
 	struct sockaddr_in addr)
 {
-	session->control = (struct connection){addr, sock};
 	ft_memset(&(session->user), 0, sizeof(session->user));
+	session->login = NULL;
+	ft_memset(session->user_buf, 0, sizeof(session->user_buf));
+	session->control = (struct connection){addr, sock};
 	ft_memset(&(session->data), 0, sizeof(session->data));
 	session->command = NULL;
 	session->args = NULL;

@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:28:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 06:12:11 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/28 08:40:33 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 /* ACCESS CONTROL COMMANDS */
 
 int ftp_user(struct ftp_session *session);
+int ftp_pass(struct ftp_session *session);
 int ftp_cwd(struct ftp_session *session);
 int ftp_quit(struct ftp_session *session);
 

@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/27 12:03:18 by marvin           ###   ########.fr       */
+/*   Updated: 2019/09/28 12:31:06 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <grp.h>
 
-#include <stdio.h> //fprintf
+#include <stdio.h> //printf
 
 #include "protocol_interpreter.h"
 #include "dtp.h"
@@ -68,8 +68,12 @@ int protocol_interpreter(struct ftp_session *session)
 			continue ;
 		}
 		printf("command: %s\n", line);
-		if (set_command(session, line) != 0)
+		if (set_command(session, line) != 0) {
 			send_reply(session->control.sock, FTP_SYNT_ERR);
+			continue ;
+		}
+		if (session->login && session->command != &ftp_pass)
+			send_reply(session->control.sock, FTP_AUTH_USAGE);
 		else if (session->command(session) < 0)
 			die(session);
 	}

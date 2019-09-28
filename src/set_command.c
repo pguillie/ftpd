@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/05 08:50:57 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 08:07:04 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/28 12:31:40 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static struct {
 	int (*fptr)(struct ftp_session *session);
 } command[] = {
 	{"user", &ftp_user},
+	{"pass", &ftp_pass},
 	{"cwd", &ftp_cwd},
 	{"quit", &ftp_quit},
 	{"port", &ftp_port},

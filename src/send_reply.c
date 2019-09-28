@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 15:46:43 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 07:45:43 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/09/28 12:28:52 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ const char * const ftp_reply_message[] = {
 	[FTP_SYNT_ERR] = "500 Syntax error.",
 	[FTP_SYNT_TOO_LONG] = "500 Command line too long.",
 	[FTP_SYNT_NOT_IMPL] = "502 Command not implemented.",
+	[FTP_SYNT_BAD_SEQ] = "503 Bad sequence of commands.",
 	[FTP_SYNT_NOT_IMPL_PARA] = "504 Command not implemented for that parameter.",
 	[FTP_INFO_SYS_TYPE] = "215 * system type.",
 	[FTP_CONN_CTRL_READY] = "220 Service ready for new user.",
@@ -32,8 +33,10 @@ const char * const ftp_reply_message[] = {
 	[FTP_CONN_CTRL_ERR] = "421 Service not available. Closing control connection.",
 	[FTP_CONN_DATA_ERR] = "425 Can't open data connection.",
 	[FTP_CONN_ABORT_ERR] = "426 Connection closed, transfer aborted.",
-	[FTP_AUTH_OK] = "230 User logged in, proceed.",
-	[FTP_AUTH_ERR] = "530 Not logged in.",
+	[FTP_AUTH_OK] = "230 Login successful.",
+	[FTP_AUTH_PASS] = "331 Please specify the password."
+	[FTP_AUTH_ERR] = "530 Login incorrect.",
+	[FTP_AUTH_USAGE] = "530 Please login with USER and PASS.",
 	[FTP_FILE_RETR_OPEN] = "150 Preparing file retrieval.",
 	[FTP_FILE_STOR_OPEN] = "150 Preparing file storage.",
 	[FTP_FILE_LIST_OPEN] = "150 Preparing directory listing.",
