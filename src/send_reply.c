@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 15:46:43 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/28 12:28:52 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/03 12:22:10 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ const char * const ftp_reply_message[] = {
 	[FTP_AUTH_OK] = "230 Login successful.",
 	[FTP_AUTH_PASS] = "331 Please specify the password."
 	[FTP_AUTH_ERR] = "530 Login incorrect.",
+	[FTP_AUTH_TRANSFR_ERR] = "530 Impossible to login while a transfer process is running.",
 	[FTP_AUTH_USAGE] = "530 Please login with USER and PASS.",
 	[FTP_FILE_RETR_OPEN] = "150 Preparing file retrieval.",
 	[FTP_FILE_STOR_OPEN] = "150 Preparing file storage.",

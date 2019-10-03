@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 16:58:46 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/28 12:34:03 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/03 12:22:46 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ enum ftp_reply_code {
 	FTP_AUTH_ERR,
 	FTP_AUTH_OK,
 	FTP_AUTH_PASS,
+	FTP_AUTH_TRANSFR_ERR,
 	FTP_AUTH_USAGE,
 	FTP_FILE_CWD_ERR,
 	FTP_FILE_CWD_OK,
