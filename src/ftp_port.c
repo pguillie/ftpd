@@ -59,7 +59,7 @@ int ftp_port(struct ftp_session *session)
 {
 	char *host_port;
 
-	if (!session->user.pw_uid) {
+	if (!session->auth) {
 		send_reply(session->control.sock, FTP_AUTH_ERR);
 		return 1;
 	}

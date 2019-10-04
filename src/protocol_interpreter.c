@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/03 11:05:35 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/04 14:10:01 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include "../libft/include/libft.h"
 
 pid_t dtp = -1;
+int dtp_ctrl_sock;
 
 static void dtp_exit_status(int sig __attribute__((unused)))
 {
@@ -30,25 +31,9 @@ static void dtp_exit_status(int sig __attribute__((unused)))
 	wait4(dtp, &ftp_reply_code, 0, NULL);
 	dtp = -1;
 	if (WIFEXITED(ftp_reply_code))
-		send_dtp_reply(-1, WEXITSTATUS(ftp_reply_code));
+		send_reply(dtp_ctrl_sock, WEXITSTATUS(ftp_reply_code));
 	else
-		send_dtp_reply(-1, FTP_FILE_LOCAL_ERR);
-}
-
-static int log_user(struct ftp_session *session)
-{
-	if (session->user.uid == 0 || session->user.gid == 0
-		|| setgid(session->user.gid) < 0
-		|| initgroups(session->user.name, session->user.gid) < 0
-		|| setuid(session->user.uid) < 0) {
-		ft_memset(&(session->user), 0, sizeof(session->user));
-		send_reply(session->control.sock, FTP_AUTH_ERR);
-		return 1;
-	}
-	if (chdir(session->user.dir) < 0)
-		die(session);
-	send_reply(session->control.sock, FTP_AUTH_OK);
-	return 0;
+		send_reply(dtp_ctrl_sock, FTP_FILE_LOCAL_ERR);
 }
 
 int protocol_interpreter(struct ftp_session *session)
@@ -58,12 +43,7 @@ int protocol_interpreter(struct ftp_session *session)
 
 	if (signal(SIGCHLD, dtp_exit_status) == SIG_ERR)
 		die(session);
-	if (session->user.uid != 0) {
-		printf("Log in user: %s\n", session->user.name);
-		log_user(session);
-	} else {
-		printf("No user to log in!\n");
-	}
+	dtp_ctrl_sock = session->control.sock;
 	while ((ret = recv_command(session->control.sock, line,
 				sizeof(line))) > 0) {
 		if (ret > 1) {
@@ -71,13 +51,8 @@ int protocol_interpreter(struct ftp_session *session)
 			continue ;
 		}
 		printf("command: %s\n", line);
-		if (set_command(session, line) != 0) {
+		if (set_command(session, line) != 0)
 			send_reply(session->control.sock, FTP_SYNT_ERR);
-		/* 	continue ; */
-		/* } */
-		/* if (session->user.login[0] && session->command != &ftp_pass) */
-		/* 	send_reply(session->control.sock, FTP_AUTH_USAGE); */
-		}
 		else if (session->command(session) < 0)
 			die(session);
 	}

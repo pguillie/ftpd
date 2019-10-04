@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/09/27 11:56:24 by marvin           ###   ########.fr        #
+#    Updated: 2019/10/04 14:17:06 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -34,10 +34,10 @@ sources =					\
 	set_command.c				\
 	recv_command.c				\
 	send_reply.c				\
-	send_dtp_reply.c			\
 	close_session.c				\
 	die.c					\
 	ftp_user.c				\
+	ftp_pass.c				\
 	ftp_cwd.c				\
 	ftp_quit.c				\
 	ftp_port.c				\

@@ -18,7 +18,7 @@
 
 int ftp_list(struct ftp_session *session)
 {
-	if (!session->user.pw_uid) {
+	if (!session->auth) {
 		send_reply(session->control.sock, FTP_AUTH_ERR);
 		return 1;
 	}
