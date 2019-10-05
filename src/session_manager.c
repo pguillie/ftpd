@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 11:23:05 by marvin            #+#    #+#             */
-/*   Updated: 2019/10/04 14:07:17 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/05 13:33:39 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,8 @@ static int login(struct passwd *pwd)
 	return 0;
 }
 
-static int auth(int pipefd, struct ftp_session *session, struct passwd **pwd)
+static int get_session(int pipefd, struct ftp_session *session)
 {
-	char login[256];
 	ssize_t n;
 
 	n = read(pipefd, session, sizeof(struct ftp_session));
@@ -53,11 +52,17 @@ static int auth(int pipefd, struct ftp_session *session, struct passwd **pwd)
 		return 0;
 	else if (n < 0 || (size_t)n < sizeof(struct ftp_session))
 		return -1;
+	return 1;
+}
+
+static struct passwd *get_session_login(int pipefd, struct ftp_session *session)
+{
+	ssize_t n;
+
 	n = read(pipefd, login, sizeof(login));
 	if (n < 1)
 		return -1;
 	login[n] = '\0';
-	*pwd = getpwnam(login);
 	return 1;
 }
 
@@ -73,8 +78,7 @@ int session_manager(int sock, struct sockaddr_in addr)
 		exit(EXIT_FAILURE);
 	if (init_session(&session, (struct connection){addr, sock}) == -1)
 		die(&session);
-	quit = 0;
-	while (!quit) {
+	do {
 		if (pipe(pipefd) == -1)
 			die(&session);
 		pi = fork();
@@ -95,6 +99,11 @@ int session_manager(int sock, struct sockaddr_in addr)
 		wait4(pi, &ret, 0, NULL);
 		printf("Child exited with status: %d\n", ret);
 		if (WIFEXITED(ret) && ret == EXIT_SUCCESS) {
+			ret = get_session(pipefd[0], &session);
+			quit = (ret == 1 ? 0 : 1);
+
+
+
 			ret = auth(pipefd[0], &session, &pwd);
 			if (ret == -1)
 				send_reply(session.control.sock, FTP_CONN_CTRL_ERR);
@@ -106,7 +115,7 @@ int session_manager(int sock, struct sockaddr_in addr)
 			quit = 1;
 		}
 		close(pipefd[0]);
-	}
+	} while (!quit);
 	close_session(&session);
 	return (WIFEXITED(ret) ? ret : EXIT_FAILURE);
 }

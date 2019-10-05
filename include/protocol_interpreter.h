@@ -6,17 +6,20 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/26 07:40:07 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/04 14:05:46 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/05 12:08:51 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PROTOCOL_INTERPRETER_H
 # define PROTOCOL_INTERPRETER_H
 
+# include <pwd.h>
+
 # include "ftp_reply.h"
 # include "ftp_struct.h"
 
-int session_manager(int sock, struct sockaddr_in connected_socket);
+int session_manager(int sock, struct sockaddr_in addr);
+int auth(int pipefd, struct ftp_session *session, struct passwd **pwd);
 
 int protocol_interpreter(struct ftp_session *session);
 

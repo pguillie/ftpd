@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/10/04 14:17:06 by pguillie         ###   ########.fr        #
+#    Updated: 2019/10/05 13:06:30 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -30,6 +30,7 @@ sources =					\
 	main.c					\
 	server.c				\
 	session_manager.c			\
+	auth.c					\
 	protocol_interpreter.c			\
 	set_command.c				\
 	recv_command.c				\
@@ -64,7 +65,7 @@ objects = $(addprefix $(srcdir), $(sources:%.c=%.o))
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(objects)
-	$(CC) -o $@ $^ -L$(dir $(LIBFT)) -lft
+	$(CC) -lcrypt -o $@ $^ -L$(dir $(LIBFT)) -lft
 
 $(objects): $(addprefix $(incdir), $(headers))
 
