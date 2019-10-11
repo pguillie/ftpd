@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/27 12:03:18 by marvin           ###   ########.fr       */
+/*   Updated: 2019/10/26 12:35:37 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <grp.h>
-
-#include <stdio.h> //fprintf
 
 #include "protocol_interpreter.h"
 #include "dtp.h"
@@ -58,7 +56,6 @@ int protocol_interpreter(struct ftp_session *session)
 
 	if (signal(SIGCHLD, dtp_exit_status) == SIG_ERR)
 		die(session);
-	printf("Log user: %s\n", session->user.pw_name);
 	if (session->user.pw_uid != 0)
 		log_user(session);
 	while ((ret = recv_command(session->control.sock, line,
@@ -67,7 +64,8 @@ int protocol_interpreter(struct ftp_session *session)
 			send_reply(session->control.sock, FTP_SYNT_TOO_LONG);
 			continue ;
 		}
-		printf("command: %s\n", line);
+		server_log(line, (struct sockaddr *)&session->control.addr,
+			session->control.addr_len);
 		if (set_command(session, line) != 0)
 			send_reply(session->control.sock, FTP_SYNT_ERR);
 		else if (session->command(session) < 0)
