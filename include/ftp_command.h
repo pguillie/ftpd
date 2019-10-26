@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:28:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 06:12:11 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/11 13:51:45 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int ftp_quit(struct ftp_session *session);
 
 int ftp_port(struct ftp_session *session);
 int ftp_type(struct ftp_session *session);
+int ftp_eprt(struct ftp_session *session);
 
 /* FTP SERVICE COMMANDS */
 

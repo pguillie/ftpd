@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/16 15:45:27 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/15 14:41:43 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/26 07:04:40 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,63 +15,81 @@
 #include "protocol_interpreter.h"
 #include "../libft/include/libft.h"
 
-static int port_syntax(const char *str)
+static int is_valid_syntax(const char *addr)
 {
-	size_t i;
-	int comma;
+	size_t i, byte;
 
-	i = 0;
-	comma = 5;
-	while (str[i]
-		&& (ft_isdigit(str[i]) || (str[i] == ',' && comma-- > 0))) {
-		i++;
+	byte = 0;
+	while (*addr) {
+		if (*addr == ',')
+			addr += 1;
+		i = 0;
+		while (ft_isdigit(addr[i]))
+			i++;
+		if (!i || ft_atoi(addr) > 255 || (addr[i] && addr[i] != ','))
+			return 0;
+		addr += i;
+		byte++;
 	}
-	return (!comma & !str[i]);
+	if (byte != 6)
+		return 0;
+	return 1;
 }
 
-static int set_host_port(struct ftp_session *session, char *host_port)
+static void set_host(char *host, const char *addr)
 {
-	in_addr_t host;
-	int port;
-	size_t comma, i;
+	size_t i;
+	int byte;
 
-	comma = 0;
 	i = 0;
-	while (comma < 4) {
-		if (host_port[i] == ',')
-			host_port[i] = (++comma < 4 ? '.' : '\0');
+	byte = 0;
+	while (byte < 4) {
+		if (addr[i] == ',') {
+			byte++;
+			host[i] = (byte < 4 ? '.' : '\0');
+		} else {
+			host[i] = addr[i];
+		}
 		i++;
 	}
-	host = inet_addr(host_port);
-	port = ft_atoi(host_port + i) * 256;
-	while (host_port[i] != ',')
-		i++;
-	port += ft_atoi(host_port + i + 1);
-	if (host == INADDR_NONE || port < 0 || port > USHRT_MAX)
-		return -1;
-	session->data.addr.sin_family = AF_INET;
-	session->data.addr.sin_port = htons(port);
-	session->data.addr.sin_addr.s_addr = host;
-	return 0;
+}
+
+static void set_port(char *port, const char *addr)
+{
+	size_t i;
+	int n;
+
+	for (i = 0; i < 4; i++)
+		while (*addr++ != ',') ;
+	n = ft_atoi(addr);
+	while (*addr++ != ',') ;
+	n = n * 256 + ft_atoi(addr);
+	i = 1;
+	while (n / (i * 10) > 0)
+		i *= 10;
+	while (i) {
+		*port++ = n / i + '0';
+		n %= i;
+		i /= 10;
+	}
+	*port = '\0';
 }
 
 int ftp_port(struct ftp_session *session)
 {
-	char *host_port;
+	char *addr;
 
 	if (!session->user.pw_uid) {
 		send_reply(session->control.sock, FTP_AUTH_ERR);
 		return 1;
 	}
-	host_port = ft_strtok(session->args, " ");
-	if (!host_port || ft_strtok(NULL, " ") || !port_syntax(host_port)) {
+	addr = session->args;
+	if (addr == NULL || !is_valid_syntax(addr)) {
 		send_reply(session->control.sock, FTP_SYNT_ERR);
 		return 1;
 	}
-	if (set_host_port(session, host_port) != 0) {
-		send_reply(session->control.sock, FTP_SYNT_ERR);
-		return -1;
-	}
+	set_host(session->data.host, addr);
+	set_port(session->data.port, addr);
 	send_reply(session->control.sock, FTP_SYNT_CMD_OK, "PORT");
 	return 0;
 }
