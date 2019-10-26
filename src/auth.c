@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 11:34:34 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/10 11:19:44 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 01:04:21 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ static int get_session_login(int fd, struct ftp_session *session, char *login)
 
 static char *get_password(struct ftp_session *session)
 {
-	char line[128];//
+	const char *str = "PASS";
+	char line[128];
+	size_t i;
 	int ret;
 
 	send_reply(session->control.sock, FTP_AUTH_PASS);
@@ -48,55 +50,65 @@ static char *get_password(struct ftp_session *session)
 		send_reply(session->control.sock, FTP_SYNT_TOO_LONG);
 		return NULL;
 	}
-	set_command(session, line);
-	if (session->command != &ftp_pass || session->args == NULL) {
+	i = 0;
+	while (*str && (line[i++] | 32) == (*str | 32))
+		str++;
+	printf("command: %s\n", *str == 0 ? "PASS ****" : line);
+	if (*str != '\0' || line[i] != ' ' || !ft_isgraph(line[i + 1])) {
 		send_reply(session->control.sock, FTP_AUTH_USAGE);
 		return NULL;
 	}
-	return ft_strdup(session->args);
+	return ft_strdup(line + i + 1);
+}
+
+static int valid_credentials(const char *login, struct passwd *pwd,
+	struct ftp_session *session)
+{
+	struct spwd *spwd;
+	char *passwd, *encrypted;
+
+	spwd = getspnam(login);
+	passwd = get_password(session);
+	if (passwd == NULL)
+		return -1;
+	if (pwd) {
+		if (spwd)
+			pwd->pw_passwd = spwd->sp_pwdp;
+		encrypted = crypt(passwd, pwd->pw_passwd);
+		//printf("%s\n%s\n", encrypted, pwd->pw_passwd);
+	} else {
+		encrypted = NULL;
+	}
+	ft_memset(passwd, '\0', ft_strlen(passwd));
+	free(passwd);
+	if (!encrypted || ft_strcmp(encrypted, pwd->pw_passwd) != 0)
+		return 0;
+	write(1, "OK\n",3 );
+	return 1;
 }
 
 int auth(int pipefd, struct ftp_session *session, struct passwd **pwd_ptr)
 {
 	struct passwd *pwd;
-	struct spwd *spwd;
 	char login[256];
-	char *passwd, *encrypted;
-	int ret;
+	int success;
 
 	*pwd_ptr = NULL;
-	ret = get_session_login(pipefd, session, login);
-	printf("get login: %s\n", login);
-	if (ret == 1) {
-		pwd = getpwnam(login);
-		spwd = getspnam(login);
-		passwd = get_password(session);
-		printf("passwd: %s\n", passwd);
-		if (pwd != NULL) {
-			write(1, "foo\n", 4);
-			if (spwd != NULL)
-				pwd->pw_passwd = spwd->sp_pwdp;
-			else
-				perror("shadow");
-			encrypted = crypt(passwd, pwd->pw_passwd);
-			printf("enc: %s\npwd: %s\n", encrypted, pwd->pw_passwd);
-		} else {
-			write(1, "bar\n", 4);
-			encrypted = NULL;
-		}
-		write(1, "baz\n", 4);
-		ft_memset(passwd, '\0', ft_strlen(passwd));
-		free(passwd);
-		write(1, "A\n", 2);
-		if (encrypted && ft_strcmp(encrypted, pwd->pw_passwd) == 0) {
-			*pwd_ptr = pwd;
-			send_reply(session->control.sock, FTP_AUTH_OK);
-		} else {
-			printf("Wrong password\n");
+	success = get_session_login(pipefd, session, login);
+	if (success != 1) {
+		if (success == -1)
+			send_reply(session->control.sock, FTP_CONN_CTRL_ERR);
+		return -1;
+	}
+	//printf("login: %s\n", login);
+	pwd = getpwnam(login);
+	success = valid_credentials(login, pwd, session);
+	if (success != 1) {
+		if (success == 0)
 			send_reply(session->control.sock, FTP_AUTH_ERR);
-		}
-		write(1, "B\n", 2);
-	} else if (ret == -1)
-		send_reply(session->control.sock, FTP_CONN_CTRL_ERR);
-	return ret;
+		return 0;
+	}
+	*pwd_ptr = pwd;
+	send_reply(session->control.sock, FTP_AUTH_OK);
+	return 1;
 }

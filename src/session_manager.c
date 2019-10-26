@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 11:23:05 by marvin            #+#    #+#             */
-/*   Updated: 2019/10/10 10:31:33 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/26 23:32:35 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,15 @@ int session_manager(int sock, struct sockaddr_in addr)
 			session.auth = login(pwd);
 			if (session.auth < 0)
 				die(&session);
- 			session.pipefd = pipefd[1];
+			session.pipefd = pipefd[1];
 			protocol_interpreter(&session);
 		}
 		close(pipefd[1]);
 		wait4(pi, &ret, 0, NULL);
-		if (WIFEXITED(ret) && ret == EXIT_SUCCESS) {
-			ret = auth(pipefd[0], &session, &pwd);
-			quit = (ret == 1 ? 0 : 1);
-		} else {
+		if (WIFEXITED(ret) && ret == EXIT_SUCCESS)
+			quit = (auth(pipefd[0], &session, &pwd) < 0);
+		else
 			quit = 1;
-		}
 		close(pipefd[0]);
 	} while (!quit);
 	close_session(&session);

@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/13 06:40:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/04 14:11:21 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/26 23:49:41 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ int ftp_user(struct ftp_session *session)
 	char *name;
 	ssize_t n;
 
+	if (dtp != -1) {
+		send_reply(session->control.sock, FTP_AUTH_TRANSFR_ERR);
+		return 1;
+	}
 	name = ft_strtok(session->args, " ");
 	if (name == NULL || ft_strtok(NULL, " ") != NULL) {
 		send_reply(session->control.sock, FTP_SYNT_ERR);
-		return 1;
-	}
-	if (dtp != -1) {
-		send_reply(session->control.sock, FTP_AUTH_TRANSFR_ERR);
 		return 1;
 	}
 	n = sizeof(*session);
