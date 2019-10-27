@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   session_manager.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/27 11:23:05 by marvin            #+#    #+#             */
-/*   Updated: 2019/10/27 10:19:35 by pguillie         ###   ########.fr       */
+/*   Created: 2019/09/27 11:23:05 by pguillie          #+#    #+#             */
+/*   Updated: 2019/10/27 14:57:14 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 static int init_session(struct ftp_session *session, int sock,
 	struct sockaddr_storage addr, socklen_t addr_len)
 {
+	char cwd[PATH_MAX];
+
 	session->control.addr = addr;
 	session->control.addr_len = addr_len;
 	session->control.sock = sock;
@@ -30,6 +32,10 @@ static int init_session(struct ftp_session *session, int sock,
 	session->command = NULL;
 	session->args = NULL;
 	session->data_type = TYPE_ASCII;
+	if (getuid() != 0) {
+		if (!getcwd(cwd, PATH_MAX) || !absolute_path(cwd, session->home))
+			return -1;
+	}
 	if (send_reply(session->control.sock, FTP_CONN_CTRL_READY) != 0)
 		return -1;
 	return 0;

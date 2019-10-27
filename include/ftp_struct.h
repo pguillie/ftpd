@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 08:39:14 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 07:23:02 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 14:33:28 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ enum ftp_data_type {
 
 struct ftp_session {
 	int auth;
+	char home[PATH_MAX];
 	struct {
 		struct sockaddr_storage addr;
 		socklen_t addr_len;

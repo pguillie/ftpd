@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:30:37 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/26 13:19:28 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 13:35:57 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "ftp_reply.h"
 
 #define LS	"/bin/ls"
-#define LS_OPT	"-n"
+#define LS_OPT	"-Hn"
 
 int dtp_list(struct ftp_session *session)
 {

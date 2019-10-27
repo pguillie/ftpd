@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 11:34:34 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 11:01:00 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 14:34:28 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int auth(int pipefd, struct ftp_session *session, struct passwd **pwd_ptr)
 			send_reply(session->control.sock, FTP_AUTH_ERR);
 		if (success != 1)
 			return 0;
+		if (absolute_path(pwd->pw_dir, session->home) == NULL)
+			return -1;
 		*pwd_ptr = pwd;
 	}
 	send_reply(session->control.sock, FTP_AUTH_OK);

@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:20:56 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/15 14:41:50 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 14:39:51 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 #include <limits.h>
 
 #include "protocol_interpreter.h"
+#include "../libft/include/libft.h"
 
 int ftp_pwd(struct ftp_session *session)
 {
-	char cwd[PATH_MAX];
+	char cwd[PATH_MAX], *chroot;
 
 	if (!session->auth) {
 		send_reply(session->control.sock, FTP_AUTH_ERR);
@@ -27,6 +28,8 @@ int ftp_pwd(struct ftp_session *session)
 		send_reply(session->control.sock, FTP_FILE_PWD_ERR);
 		return 2;
 	}
-	send_reply(session->control.sock, FTP_FILE_PWD_OK, cwd);
+	chroot = cwd + ft_strlen(session->home) - 1;
+	send_reply(session->control.sock, FTP_FILE_PWD_OK,
+		*chroot ? chroot : "/");
 	return 0;
 }

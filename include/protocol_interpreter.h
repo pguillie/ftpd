@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/26 07:40:07 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 06:51:15 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 14:15:49 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,7 @@ int send_reply(int sock, enum ftp_reply_code rep_idx, ...);
 
 void close_session(struct ftp_session *session);
 void die(struct ftp_session *session);
+
+char *chroot_home(const char *home, const char *path, char *chrooted);
 
 #endif /* PROTOCOL_INTERPRETER_H */
