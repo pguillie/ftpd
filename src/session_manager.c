@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 11:23:05 by marvin            #+#    #+#             */
-/*   Updated: 2019/10/27 08:22:07 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 10:19:35 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int session_manager(int sock, struct sockaddr_storage addr, socklen_t addr_len)
 			die(&session);
 		} else if (pi == 0) {
 			close(pipefd[0]);
-			session.auth = login(pwd);
+			session.auth = (getuid() != 0 ? 1 : login(pwd));
 			if (session.auth < 0)
 				die(&session);
 			session.pipefd = pipefd[1];

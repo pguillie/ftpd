@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 11:34:34 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 08:20:31 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 11:01:00 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,19 +94,19 @@ int auth(int pipefd, struct ftp_session *session, struct passwd **pwd_ptr)
 
 	*pwd_ptr = NULL;
 	success = get_session_login(pipefd, session, login);
-	if (success != 1) {
-		if (success == -1)
-			send_reply(session->control.sock, FTP_CONN_CTRL_ERR);
+	if (success == -1)
+		send_reply(session->control.sock, FTP_CONN_CTRL_ERR);
+	if (success != 1)
 		return -1;
-	}
-	pwd = getpwnam(login);
-	success = valid_credentials(login, pwd, session);
-	if (success != 1) {
+	if (getuid() == 0) {
+		pwd = getpwnam(login);
+		success = valid_credentials(login, pwd, session);
 		if (success == 0)
 			send_reply(session->control.sock, FTP_AUTH_ERR);
-		return 0;
+		if (success != 1)
+			return 0;
+		*pwd_ptr = pwd;
 	}
-	*pwd_ptr = pwd;
 	send_reply(session->control.sock, FTP_AUTH_OK);
 	return 1;
 }

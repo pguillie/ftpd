@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 15:46:43 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/04 14:10:33 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 10:58:41 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,24 @@ const char * const ftp_reply_message[] = {
 	[FTP_SYNT_TOO_LONG] = "500 Command line too long.",
 	[FTP_SYNT_NOT_IMPL] = "502 Command not implemented.",
 	[FTP_SYNT_BAD_SEQ] = "503 Bad sequence of commands.",
-	[FTP_SYNT_NOT_IMPL_PARA] = "504 Command not implemented for that parameter.",
+	[FTP_SYNT_NOT_IMPL_PARA] = "504 Command not implemented for that"
+	" parameter.",
 	[FTP_INFO_SYS_TYPE] = "215 * system type.",
 	[FTP_CONN_CTRL_READY] = "220 Service ready for new user.",
 	[FTP_CONN_CTRL_CLOSE] = "221 Service closing control connection.",
-	[FTP_CONN_DATA_CLOSE] = "226 Transfer successfull, closing data connection.",
+	[FTP_CONN_DATA_CLOSE] = "226 Transfer successfull,"
+	" closing data connection.",
 	[FTP_CONN_ABORT_OK] = "226 Transfer successfully aborted.",
-	[FTP_CONN_CTRL_ERR] = "421 Service not available. Closing control connection.",
+	[FTP_CONN_CTRL_ERR] = "421 Service not available."
+	" Closing control connection.",
 	[FTP_CONN_DATA_ERR] = "425 Can't open data connection.",
 	[FTP_CONN_ABORT_ERR] = "426 Connection closed, transfer aborted.",
 	[FTP_AUTH_OK] = "230 Login successful.",
 	[FTP_AUTH_PASS] = "331 Please specify the password.",
 	[FTP_AUTH_ERR] = "530 Login incorrect.",
-	[FTP_AUTH_TRANSFR_ERR] = "530 Impossible to login while a transfer process is running.",
 	[FTP_AUTH_USAGE] = "530 Please login with USER and PASS.",
+	[FTP_AUTH_TRANSFR_ERR] = "530 Impossible to log"
+	" in while a transfer process is running.",
 	[FTP_FILE_RETR_OPEN] = "150 Preparing file retrieval.",
 	[FTP_FILE_STOR_OPEN] = "150 Preparing file storage.",
 	[FTP_FILE_LIST_OPEN] = "150 Preparing directory listing.",
@@ -45,7 +49,8 @@ const char * const ftp_reply_message[] = {
 	[FTP_FILE_PWD_OK] = "257 \"*\"",
 	[FTP_FILE_LIST_ERR] = "450 Unable to list directory.",
 	[FTP_FILE_TRANSFR_ERR] = "451 Another transfer process is running.",
-	[FTP_FILE_LOCAL_ERR] = "451 Critical error encountered. Transfer aborted.",
+	[FTP_FILE_LOCAL_ERR] = "451 Critical error encountered."
+	" Transfer aborted.",
 	[FTP_FILE_ERR] = "550 File unavailable.",
 	[FTP_FILE_CWD_ERR] = "550 Unable to change working directory.",
 	[FTP_FILE_PWD_ERR] = "550 Working directory unavailable."

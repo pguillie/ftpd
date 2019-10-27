@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 06:59:25 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 10:15:18 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void dtp_exit_status(int sig __attribute__((unused)))
 
 int protocol_interpreter(struct ftp_session *session)
 {
-	char line[128];//
+	char line[128];
 	int ret;
 
 	if (signal(SIGCHLD, dtp_exit_status) == SIG_ERR)
