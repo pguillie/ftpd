@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 11:23:05 by marvin            #+#    #+#             */
-/*   Updated: 2019/10/26 23:32:35 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 07:24:13 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,15 @@
 #include "protocol_interpreter.h"
 #include "../libft/include/libft.h"
 
-static int init_session(struct ftp_session *session, struct connection control)
+static int init_session(struct ftp_session *session, int sock,
+	struct sockaddr_storage addr, socklen_t addr_len)
 {
-	session->control = control;
-	session->data = control;
+	session->control.addr = addr;
+	session->control.addr_len = addr_len;
+	session->control.sock = sock;
+	ft_memset(&(session->data), 0, sizeof(session->data));
+	session->command = NULL;
+	session->args = NULL;
 	session->data_type = TYPE_ASCII;
 	if (send_reply(session->control.sock, FTP_CONN_CTRL_READY) != 0)
 		return -1;
@@ -44,7 +49,7 @@ static int login(struct passwd *pwd)
 	return 1;
 }
 
-int session_manager(int sock, struct sockaddr_in addr)
+int session_manager(int sock, struct sockaddr_storage addr, socklen_t addr_len)
 {
 	struct ftp_session session;
 	int ret, quit, pipefd[2];
@@ -54,7 +59,7 @@ int session_manager(int sock, struct sockaddr_in addr)
 
 	if (signal(SIGCHLD, SIG_DFL) == SIG_ERR) /* sth more adapted? */
 		exit(EXIT_FAILURE);
-	if (init_session(&session, (struct connection){addr, sock}) == -1)
+	if (init_session(&session, sock, addr, addr_len) == -1)
 		die(&session);
 	do {
 		if (pipe(pipefd) == -1)
@@ -78,6 +83,8 @@ int session_manager(int sock, struct sockaddr_in addr)
 			quit = 1;
 		close(pipefd[0]);
 	} while (!quit);
+	server_log("closed socket", (struct sockaddr *)&session.control.addr,
+		session.control.addr_len);
 	close_session(&session);
 	return (WIFEXITED(ret) ? ret : EXIT_FAILURE);
 }

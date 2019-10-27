@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/05 12:25:34 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 06:59:25 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <grp.h>
-
-#include <stdio.h> //printf
 
 #include "protocol_interpreter.h"
 #include "dtp.h"
@@ -50,7 +48,8 @@ int protocol_interpreter(struct ftp_session *session)
 			send_reply(session->control.sock, FTP_SYNT_TOO_LONG);
 			continue ;
 		}
-		printf("command: %s\n", line);
+		server_log(line, (struct sockaddr *)&session->control.addr,
+			session->control.addr_len);
 		if (set_command(session, line) != 0)
 			send_reply(session->control.sock, FTP_SYNT_ERR);
 		else if (session->command(session) < 0)

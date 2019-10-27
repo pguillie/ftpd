@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 08:39:14 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/04 14:19:51 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 07:23:02 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,22 @@ enum ftp_data_type {
 	TYPE_IMAGE
 };
 
-struct connection {
-	struct sockaddr_in addr;
-	int sock;
-};
-
 struct ftp_session {
-	/* connections */
-	struct connection control;    /* control connection */
-	struct connection data;	      /* data connection */
-	enum ftp_data_type data_type; /* data representation type */
-	/* FTP command */
-	int (*command)(struct ftp_session *this); /* command to execute */
-	char *args;	   /* command's arguments */
-	/* process information */
-	int auth;	   /* true if a system user is authentified */
-	int pipefd;	   /* pipe's write end, used to log user */
+	int auth;
+	struct {
+		struct sockaddr_storage addr;
+		socklen_t addr_len;
+		int sock;
+	} control;
+	struct {
+		char host[128];
+		char port[8];
+		int sock;
+	} data;
+	int (*command)(struct ftp_session *this);
+	char *args;
+	enum ftp_data_type data_type;
+	int pipefd;
 };
 
 #endif /* FTP_STRUCT_H */

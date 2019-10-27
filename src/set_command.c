@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/05 08:50:57 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/04 14:16:54 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 07:18:55 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ static struct {
 	{"pwd", &ftp_pwd},
 	{"list", &ftp_list},
 	{"syst", &ftp_syst},
-	{"noop", &ftp_noop}
+	{"noop", &ftp_noop},
+	{"eprt", &ftp_eprt}
 };
 
 int set_command(struct ftp_session *session, char *cmd_line)

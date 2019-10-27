@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/10/05 13:06:30 by pguillie         ###   ########.fr        #
+#    Updated: 2019/10/27 06:50:15 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -32,6 +32,7 @@ sources =					\
 	session_manager.c			\
 	auth.c					\
 	protocol_interpreter.c			\
+	server_log.c				\
 	set_command.c				\
 	recv_command.c				\
 	send_reply.c				\
@@ -49,6 +50,7 @@ sources =					\
 	ftp_list.c				\
 	ftp_syst.c				\
 	ftp_noop.c				\
+	ftp_eprt.c				\
 	data_transfer_process.c			\
 	dtp_retr.c				\
 	dtp_stor.c				\

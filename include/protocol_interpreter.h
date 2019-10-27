@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/26 07:40:07 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/05 12:08:51 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 06:51:15 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,14 @@
 # include "ftp_reply.h"
 # include "ftp_struct.h"
 
-int session_manager(int sock, struct sockaddr_in addr);
+int session_manager(int sock, struct sockaddr_storage addr, socklen_t addr_len);
 int auth(int pipefd, struct ftp_session *session, struct passwd **pwd);
 
 int protocol_interpreter(struct ftp_session *session);
+void server_log(const char *msg, struct sockaddr *addr, socklen_t addr_len);
 
 int set_command(struct ftp_session *session, char *cmd_line);
-int recv_command(int sock, char *command, size_t commandsz);
+int recv_command(int sock, char *command, size_t cmd_size);
 int send_reply(int sock, enum ftp_reply_code rep_idx, ...);
 
 void close_session(struct ftp_session *session);
