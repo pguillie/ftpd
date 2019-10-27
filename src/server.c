@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/30 09:09:49 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 07:03:18 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 08:22:22 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,8 @@ int server(const char *service)
 			fprintf(stderr, "Error: accept\n");
 			continue ;
 		}
-		server_log("connect", (struct sockaddr *)&peer_addr, addr_len);
+		server_log("open connection", (struct sockaddr *)&peer_addr,
+			addr_len);
 		session = fork();
 		if (session < 0) {
 			fprintf(stderr, "Error: fork\n");

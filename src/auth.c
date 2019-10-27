@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 11:34:34 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 01:04:21 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 08:20:31 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 #include "protocol_interpreter.h"
 #include "ftp_command.h"
 #include "../libft/include/libft.h"
-
-#include <stdio.h> //printf
 
 static int get_session_login(int fd, struct ftp_session *session, char *login)
 {
@@ -53,11 +51,14 @@ static char *get_password(struct ftp_session *session)
 	i = 0;
 	while (*str && (line[i++] | 32) == (*str | 32))
 		str++;
-	printf("command: %s\n", *str == 0 ? "PASS ****" : line);
-	if (*str != '\0' || line[i] != ' ' || !ft_isgraph(line[i + 1])) {
+	if (*str != '\0' || line[i] != ' ') {
+		server_log(line, (struct sockaddr *)&session->control.addr,
+		session->control.addr_len);
 		send_reply(session->control.sock, FTP_AUTH_USAGE);
 		return NULL;
 	}
+	server_log("PASS ****", (struct sockaddr *)&session->control.addr,
+		session->control.addr_len);
 	return ft_strdup(line + i + 1);
 }
 
@@ -75,7 +76,6 @@ static int valid_credentials(const char *login, struct passwd *pwd,
 		if (spwd)
 			pwd->pw_passwd = spwd->sp_pwdp;
 		encrypted = crypt(passwd, pwd->pw_passwd);
-		//printf("%s\n%s\n", encrypted, pwd->pw_passwd);
 	} else {
 		encrypted = NULL;
 	}
@@ -83,7 +83,6 @@ static int valid_credentials(const char *login, struct passwd *pwd,
 	free(passwd);
 	if (!encrypted || ft_strcmp(encrypted, pwd->pw_passwd) != 0)
 		return 0;
-	write(1, "OK\n",3 );
 	return 1;
 }
 
@@ -100,7 +99,6 @@ int auth(int pipefd, struct ftp_session *session, struct passwd **pwd_ptr)
 			send_reply(session->control.sock, FTP_CONN_CTRL_ERR);
 		return -1;
 	}
-	//printf("login: %s\n", login);
 	pwd = getpwnam(login);
 	success = valid_credentials(login, pwd, session);
 	if (success != 1) {

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 11:23:05 by marvin            #+#    #+#             */
-/*   Updated: 2019/10/27 07:24:13 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/10/27 08:22:07 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 
 #include <pwd.h>
 #include <grp.h>
-
-#include <stdio.h> //printf
 
 #include "protocol_interpreter.h"
 #include "../libft/include/libft.h"
@@ -83,7 +81,7 @@ int session_manager(int sock, struct sockaddr_storage addr, socklen_t addr_len)
 			quit = 1;
 		close(pipefd[0]);
 	} while (!quit);
-	server_log("closed socket", (struct sockaddr *)&session.control.addr,
+	server_log("close connection", (struct sockaddr *)&session.control.addr,
 		session.control.addr_len);
 	close_session(&session);
 	return (WIFEXITED(ret) ? ret : EXIT_FAILURE);
