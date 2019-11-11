@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:07:39 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/26 06:30:58 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/10 19:16:11 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,28 +25,53 @@
 
 pid_t dtp;
 
-static int connect_data(const char *ip, const char *port)
+static int use_addr(struct addrinfo addr)
 {
-	struct addrinfo hints, *result, *rp;
+	int s;
+
+	s = socket(addr.ai_family, addr.ai_socktype, addr.ai_protocol);
+	if (s == -1)
+		return -1;
+	if (connect(s, addr.ai_addr, addr.ai_addrlen) == -1) {
+		close(s);
+		return -1;
+	}
+	return s;
+}
+
+static int connect_socket(struct addrinfo *rp)
+{
+	int sfd;
+
+	if (rp == NULL)
+		return -1;
+	if (rp->ai_family == AF_INET6) {
+		sfd = use_addr(*rp);
+		if (sfd == -1)
+			return connect_socket(rp->ai_next);
+	} else {
+		sfd = connect_socket(rp->ai_next);
+		if (sfd == -1)
+			return use_addr(*rp);
+	}
+	return sfd;
+}
+
+static int connect_data(const char *node, const char *port)
+{
+	struct addrinfo hints, *result;
 	int sfd;
 
 	ft_memset(&hints, 0, sizeof(struct addrinfo));
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = 0;
-	hints.ai_flags = AI_NUMERICHOST | AI_NUMERICSERV;
-	if (getaddrinfo(ip, port, &hints, &result) != 0)
+	hints.ai_flags = AI_NUMERICSERV;
+	if (getaddrinfo(node, port, &hints, &result) != 0)
 		return -1;
-	for (rp = result; rp != NULL; rp = rp->ai_next) {
-		sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
-		if (sfd == -1)
-			continue;
-		if (connect(sfd, rp->ai_addr, rp->ai_addrlen) != -1)
-			break;
-		close(sfd);
-	}
+	sfd = connect_socket(result);
 	freeaddrinfo(result);
-	return (rp == NULL ? -1 : sfd);
+	return sfd;
 }
 
 int data_transfer_process(struct ftp_session *session)
