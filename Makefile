@@ -6,13 +6,13 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/10/27 06:50:15 by pguillie         ###   ########.fr        #
+#    Updated: 2019/11/15 10:02:07 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 NAME	= ftpd
 CC	= gcc
-CFLAGS	= -Wall -Werror -Wextra -I$(incdir)
+CFLAGS	= -Wall -Werror -Wextra -I$(incdir) $(DEBUG)
 
 LIBFT	= libft/libft.a
 
@@ -67,12 +67,15 @@ objects = $(addprefix $(srcdir), $(sources:%.c=%.o))
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(objects)
-	$(CC) -lcrypt -o $@ $^ -L$(dir $(LIBFT)) -lft
+	$(CC) -lcrypt -o $@ $^ -L$(dir $(LIBFT)) -lft $(DEBUG)
 
 $(objects): $(addprefix $(incdir), $(headers))
 
 $(LIBFT):
 	make -C $(dir $(LIBFT))
+
+debug:
+	make re DEBUG='-fsanitize=address'
 
 clean:
 	make -C $(dir $(LIBFT)) fclean
