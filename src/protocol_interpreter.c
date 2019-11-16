@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 10:15:18 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/21 11:47:57 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,19 @@
 pid_t dtp = -1;
 int dtp_ctrl_sock;
 
+#include <stdio.h>
 static void dtp_exit_status(int sig __attribute__((unused)))
 {
 	int ftp_reply_code;
 
 	wait4(dtp, &ftp_reply_code, 0, NULL);
 	dtp = -1;
-	if (WIFEXITED(ftp_reply_code))
+	if (WIFEXITED(ftp_reply_code)) {
 		send_reply(dtp_ctrl_sock, WEXITSTATUS(ftp_reply_code));
-	else
+	} else {
+		fprintf(stderr, "DTP did not exit properly\n");
 		send_reply(dtp_ctrl_sock, FTP_FILE_LOCAL_ERR);
+	}
 }
 
 int protocol_interpreter(struct ftp_session *session)

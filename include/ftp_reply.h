@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 16:58:46 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/03 12:22:46 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/16 13:45:41 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ enum ftp_reply_code {
 	FTP_FILE_LIST_OPEN,
 	FTP_FILE_PWD_ERR,
 	FTP_FILE_PWD_OK,
+	FTP_FILE_RETR_ERR,
 	FTP_FILE_RETR_OPEN,
+	FTP_FILE_STOR_ERR,
 	FTP_FILE_STOR_OPEN,
 	FTP_FILE_TRANSFR_ERR,
 };

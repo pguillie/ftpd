@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 11:23:05 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 14:57:14 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/22 10:40:31 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 static int init_session(struct ftp_session *session, int sock,
 	struct sockaddr_storage addr, socklen_t addr_len)
 {
-	char cwd[PATH_MAX];
 
 	session->control.addr = addr;
 	session->control.addr_len = addr_len;
@@ -33,7 +32,7 @@ static int init_session(struct ftp_session *session, int sock,
 	session->args = NULL;
 	session->data_type = TYPE_ASCII;
 	if (getuid() != 0) {
-		if (!getcwd(cwd, PATH_MAX) || !absolute_path(cwd, session->home))
+		if (!getcwd(session->home, PATH_MAX))
 			return -1;
 	}
 	if (send_reply(session->control.sock, FTP_CONN_CTRL_READY) != 0)

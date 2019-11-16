@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/27 13:48:42 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 14:30:28 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/22 10:40:11 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,8 @@ static int resolve_path(const char *path, char *chrooted, size_t *i, size_t l)
 		if (path[1] == '\0' || path[1] == '/')
 			return 1;
 		if (path[1] == '.' && (path[2] == '\0' || path[2] == '/')) {
-			if (*i <= l)
-				return 2;
-			while (chrooted[--(*i) - 1] != '/')
-				;
+			if (*i > l + 1)
+				while (chrooted[--(*i) - 1] != '/') ;
 			return 2;
 		}
 	}
@@ -46,21 +44,20 @@ static size_t prefix(const char **path, const char *home, char *chrooted)
 		len = ft_strlen(home);
 		ft_memcpy(chrooted, home, len);
 	}
-	if (chrooted[len - 1] != '/')
-		chrooted[len++] = '/';
+	chrooted[len++] = '/';
 	return len;
 }
 
 char *chroot_home(const char *home, const char *path, char *chrooted)
 {
-	size_t l, i, j;
+	size_t home_len, i, j;
 
-	l = ft_strlen(home);
+	home_len = ft_strlen(home);
 	i = prefix(&path, home, chrooted);
 	if (i == 0)
 		return NULL;
 	while (*path != '\0') {
-		j = resolve_path(path, chrooted, &i, l);
+		j = resolve_path(path, chrooted, &i, home_len);
 		if (j == 0) {
 			while (path[j] != '\0' && path[j] != '/') {
 				if (i > PATH_MAX - 3)
@@ -74,6 +71,6 @@ char *chroot_home(const char *home, const char *path, char *chrooted)
 		}
 		path += j;
 	}
-	chrooted[i] = '\0';
+	chrooted[(i < home_len) ? i : i - 1] = '\0';
 	return chrooted;
 }

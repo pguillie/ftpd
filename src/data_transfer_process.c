@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/23 13:07:39 by pguillie          #+#    #+#             */
-/*   Updated: 2019/11/10 19:16:11 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/16 12:45:39 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int connect_data(const char *node, const char *port)
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = 0;
-	hints.ai_flags = AI_NUMERICSERV;
+	hints.ai_flags = AI_NUMERICHOST | AI_NUMERICSERV;
 	if (getaddrinfo(node, port, &hints, &result) != 0)
 		return -1;
 	sfd = connect_socket(result);

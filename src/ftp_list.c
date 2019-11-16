@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/17 11:30:09 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 14:52:20 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/22 11:21:25 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int ftp_list(struct ftp_session *session)
 		return 1;
 	}
 	if (chroot_home(session->home, session->args, path) == NULL
-		|| access(path, X_OK) != 0) {
+		|| access(path, R_OK) != 0) {
 		send_reply(session->control.sock, FTP_FILE_LIST_ERR);
 		return 1;
 	}

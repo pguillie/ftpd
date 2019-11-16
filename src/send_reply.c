@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 15:46:43 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 10:58:41 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/21 11:19:14 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,13 @@ const char * const ftp_reply_message[] = {
 	[FTP_AUTH_USAGE] = "530 Please login with USER and PASS.",
 	[FTP_AUTH_TRANSFR_ERR] = "530 Impossible to log"
 	" in while a transfer process is running.",
-	[FTP_FILE_RETR_OPEN] = "150 Preparing file retrieval.",
-	[FTP_FILE_STOR_OPEN] = "150 Preparing file storage.",
+	[FTP_FILE_RETR_OPEN] = "150 Opening data connection to retrieve file.",
+	[FTP_FILE_STOR_OPEN] = "150 Opening data connection to store file.",
 	[FTP_FILE_LIST_OPEN] = "150 Preparing directory listing.",
 	[FTP_FILE_CWD_OK] = "250 Working directory changed.",
 	[FTP_FILE_PWD_OK] = "257 \"*\"",
+	[FTP_FILE_RETR_ERR] = "450 Unable to retrieve file.",
+	[FTP_FILE_STOR_ERR] = "450 Unable to store file.",
 	[FTP_FILE_LIST_ERR] = "450 Unable to list directory.",
 	[FTP_FILE_TRANSFR_ERR] = "451 Another transfer process is running.",
 	[FTP_FILE_LOCAL_ERR] = "451 Critical error encountered."
@@ -88,6 +90,7 @@ static int reply_arg(int sock, struct reply_buffer *rep,
 			return -1;
 	return 0;
 }
+#include <stdio.h>
 
 int send_reply(int sock, enum ftp_reply_code rep_idx, ...)
 {
@@ -99,6 +102,7 @@ int send_reply(int sock, enum ftp_reply_code rep_idx, ...)
 	rep_msg = ftp_reply_message[rep_idx];
 	rep.i = 0;
 	rep.hyphen = 1;
+	printf("\t* \"%s\"\n", rep_msg);
 	while (*rep_msg) {
 		if (*rep_msg == '*'
 			? reply_arg(sock, &rep, va_arg(ap, char *)) < 0
