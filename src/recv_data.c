@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/25 11:55:38 by pguillie          #+#    #+#             */
-/*   Updated: 2019/09/12 06:29:46 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/16 11:43:09 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,38 @@
 
 #include "data_transfer_process.h"
 
-static int recv_data_asc(int sock, int fd)
+#define BUFSIZE (1024)
+
+static int flush_buf(char *buf, int fd, size_t *i)
 {
-	char buf[1024], data[1024];
+	if (buf[*i - 1] == '\r') {
+		if (write(fd, buf, *i - 1) < 0)
+			return -1;
+		buf[0] = '\r';
+		*i = 1;
+	} else {
+		if (write(fd, buf, *i) < 0)
+			return -1;
+		*i = 0;
+	}
+	return 0;
+}
+
+static int recv_data_asc(int soc, int fd)
+{
+	char buf[BUFSIZE], data[BUFSIZE];
 	ssize_t n;
 	size_t i, j;
-	int cr;
 
-	cr = 0;
 	i = 0;
-	while ((n = recv(sock, data, sizeof(data), MSG_NOSIGNAL)) > 0) {
+	while ((n = recv(soc, data, sizeof(data), MSG_NOSIGNAL)) > 0) {
 		j = 0;
 		while (j < (size_t)n) {
-			buf[(cr && data[j] != '\n' ? ++i : i)] = data[j];
-			if (data[j++] == '\r') {
-				cr = 1;
-			} else {
-				i++;
-				cr = 0;
-			}
-			if (i == sizeof(buf)) {
-				if (write(fd, buf, i) < 0)
-					return -1;
-				i = 0;
-			}
+			if (data[j] == '\n' && i && buf[i - 1] == '\r')
+				i -= 1;
+			buf[i++] = data[j++];
+			if (i == sizeof(buf) && flush_buf(buf, fd, &i) != 0)
+				return -1;
 		}
 	}
 	if (n < 0 || (i && write(fd, buf, i) < 0))
@@ -45,12 +53,12 @@ static int recv_data_asc(int sock, int fd)
 	return 0;
 }
 
-static int recv_data_bin(int sock, int fd)
+static int recv_data_bin(int soc, int fd)
 {
-	char buf[1024];
+	char buf[BUFSIZE];
 	ssize_t n;
 
-	while ((n = recv(sock, buf, sizeof(buf), MSG_NOSIGNAL)) > 0) {
+	while ((n = recv(soc, buf, sizeof(buf), MSG_NOSIGNAL)) > 0) {
 		if (write(fd, buf, n) < 0)
 			return -1;
 	}
@@ -59,10 +67,10 @@ static int recv_data_bin(int sock, int fd)
 	return 0;
 }
 
-int recv_data(int sock, int fd, enum ftp_data_type type)
+int recv_data(int soc, int fd, enum ftp_data_type type)
 {
 	if (type == TYPE_ASCII)
-		return recv_data_asc(sock, fd);
+		return recv_data_asc(soc, fd);
 	else
-		return recv_data_bin(sock, fd);
+		return recv_data_bin(soc, fd);
 }
