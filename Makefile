@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/11/23 08:08:37 by pguillie         ###   ########.fr        #
+#    Updated: 2019/11/24 13:08:58 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -28,11 +28,15 @@ headers =					\
 
 sources =					\
 	main.c					\
+	invocation.c				\
 	server.c				\
+	run_service.c				\
+	connection_manager.c			\
 	session_manager.c			\
 	auth.c					\
+	login.c					\
 	protocol_interpreter.c			\
-	server_log.c				\
+	ftp_log.c				\
 	set_command.c				\
 	recv_command.c				\
 	send_reply.c				\
