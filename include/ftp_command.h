@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/12 12:28:24 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 06:50:27 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/23 08:09:11 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int ftp_eprt(struct ftp_session *session);
 
 int ftp_retr(struct ftp_session *session);
 int ftp_stor(struct ftp_session *session);
+int ftp_abor(struct ftp_session *session);
 int ftp_pwd(struct ftp_session *session);
 int ftp_list(struct ftp_session *session);
 int ftp_syst(struct ftp_session *session);

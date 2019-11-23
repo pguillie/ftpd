@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/05 08:50:57 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 07:18:55 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/23 09:52:19 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static struct {
 	{"type", &ftp_type},
 	{"retr", &ftp_retr},
 	{"stor", &ftp_stor},
+	{"abor", &ftp_abor},
 	{"pwd", &ftp_pwd},
 	{"list", &ftp_list},
 	{"syst", &ftp_syst},
@@ -41,6 +42,8 @@ int set_command(struct ftp_session *session, char *cmd_line)
 	if (cmd == NULL)
 		return 1;
 	i = 0;
+	while (!ft_isascii(*cmd)) // "ABOR" prefixed with unicode by BSD client?
+		cmd++;
 	while (cmd[i]) {
 		cmd[i] = ft_tolower(cmd[i]);
 		i++;

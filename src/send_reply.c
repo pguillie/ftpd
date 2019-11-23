@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 15:46:43 by pguillie          #+#    #+#             */
-/*   Updated: 2019/11/21 11:19:14 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/23 10:10:24 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ const char * const ftp_reply_message[] = {
 	[FTP_INFO_SYS_TYPE] = "215 * system type.",
 	[FTP_CONN_CTRL_READY] = "220 Service ready for new user.",
 	[FTP_CONN_CTRL_CLOSE] = "221 Service closing control connection.",
+	[FTP_CONN_ABORT_NONE] = "225 No transfer to abort.",
 	[FTP_CONN_DATA_CLOSE] = "226 Transfer successfull,"
 	" closing data connection.",
 	[FTP_CONN_ABORT_OK] = "226 Transfer successfully aborted.",
@@ -90,7 +91,6 @@ static int reply_arg(int sock, struct reply_buffer *rep,
 			return -1;
 	return 0;
 }
-#include <stdio.h>
 
 int send_reply(int sock, enum ftp_reply_code rep_idx, ...)
 {
@@ -102,12 +102,10 @@ int send_reply(int sock, enum ftp_reply_code rep_idx, ...)
 	rep_msg = ftp_reply_message[rep_idx];
 	rep.i = 0;
 	rep.hyphen = 1;
-	printf("\t* \"%s\"\n", rep_msg);
 	while (*rep_msg) {
 		if (*rep_msg == '*'
 			? reply_arg(sock, &rep, va_arg(ap, char *)) < 0
 			: reply_in(sock, &rep, *rep_msg) < 0) {
-			write(1, "exit\n", 6);
 			return -1;
 		}
 		rep_msg++;

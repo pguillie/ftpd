@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/11/15 11:26:03 by pguillie         ###   ########.fr        #
+#    Updated: 2019/11/23 08:08:37 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -47,6 +47,7 @@ sources =					\
 	ftp_type.c				\
 	ftp_retr.c				\
 	ftp_stor.c				\
+	ftp_abor.c				\
 	ftp_pwd.c				\
 	ftp_list.c				\
 	ftp_syst.c				\

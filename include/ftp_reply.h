@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 16:58:46 by pguillie          #+#    #+#             */
-/*   Updated: 2019/11/16 13:45:41 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/23 10:11:01 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ enum ftp_reply_code {
 	FTP_SYNT_NOT_IMPL,
 	FTP_SYNT_NOT_IMPL_PARA,
 	FTP_INFO_SYS_TYPE,
-	FTP_CONN_ABORT_OK,
 	FTP_CONN_ABORT_ERR,
+	FTP_CONN_ABORT_OK,
+	FTP_CONN_ABORT_NONE,
 	FTP_CONN_CTRL_CLOSE,
 	FTP_CONN_CTRL_ERR,
 	FTP_CONN_CTRL_READY,
