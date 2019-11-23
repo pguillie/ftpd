@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/10 14:51:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/11/23 09:40:55 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/24 13:10:40 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ int protocol_interpreter(struct ftp_session *session)
 			send_reply(session->control.sock, FTP_SYNT_TOO_LONG);
 			continue ;
 		}
-		server_log(line, (struct sockaddr *)&session->control.addr,
-			session->control.addr_len);
+		ftp_log(line, &session->control.addr, session->control.addr_len);
 		if (set_command(session, line) != 0)
 			send_reply(session->control.sock, FTP_SYNT_ERR);
 		else if (session->command(session) < 0)

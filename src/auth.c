@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 11:34:34 by pguillie          #+#    #+#             */
-/*   Updated: 2019/10/27 14:34:28 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/24 13:16:00 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,14 @@ static char *get_password(struct ftp_session *session)
 		send_reply(session->control.sock, FTP_SYNT_TOO_LONG);
 		return NULL;
 	}
+	ftp_log(line, &session->control.addr, session->control.addr_len);
 	i = 0;
 	while (*str && (line[i++] | 32) == (*str | 32))
 		str++;
 	if (*str != '\0' || line[i] != ' ') {
-		server_log(line, (struct sockaddr *)&session->control.addr,
-		session->control.addr_len);
 		send_reply(session->control.sock, FTP_AUTH_USAGE);
 		return NULL;
 	}
-	server_log("PASS ****", (struct sockaddr *)&session->control.addr,
-		session->control.addr_len);
 	return ft_strdup(line + i + 1);
 }
 
@@ -105,8 +102,9 @@ int auth(int pipefd, struct ftp_session *session, struct passwd **pwd_ptr)
 			send_reply(session->control.sock, FTP_AUTH_ERR);
 		if (success != 1)
 			return 0;
-		if (absolute_path(pwd->pw_dir, session->home) == NULL)
-			return -1;
+		if (ft_strlen(pwd->pw_dir) >= sizeof(session->home))
+			return 0;
+		ft_strcpy(session->home, pwd->pw_dir);
 		*pwd_ptr = pwd;
 	}
 	send_reply(session->control.sock, FTP_AUTH_OK);
