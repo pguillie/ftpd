@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/26 07:40:07 by pguillie          #+#    #+#             */
-/*   Updated: 2019/11/24 13:10:24 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/24 16:00:57 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 int session_manager(int sock, struct sockaddr_storage addr, socklen_t addr_len);
 int auth(int pipefd, struct ftp_session *session, struct passwd **pwd);
+int sys_auth(struct ftp_session *session, const char *login, struct passwd **pwd);
 int login(struct passwd *pwd);
 
 int protocol_interpreter(struct ftp_session *session);

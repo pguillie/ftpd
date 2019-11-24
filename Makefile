@@ -6,7 +6,7 @@
 #    By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/22 18:46:54 by pguillie          #+#    #+#              #
-#    Updated: 2019/11/24 13:08:58 by pguillie         ###   ########.fr        #
+#    Updated: 2019/11/24 15:30:59 by pguillie         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -15,6 +15,12 @@ CC	= gcc
 CFLAGS	= -Wall -Werror -Wextra -I$(incdir) $(DEBUG)
 
 LIBFT	= libft/libft.a
+LIBS	= -L$(dir $(LIBFT)) -lft
+
+os != uname
+ifeq ($(os), Linux)
+	LIBS += -lcrypt
+endif
 
 incdir = ./include/
 srcdir = ./src/
@@ -34,6 +40,7 @@ sources =					\
 	connection_manager.c			\
 	session_manager.c			\
 	auth.c					\
+	sys_auth.c				\
 	login.c					\
 	protocol_interpreter.c			\
 	ftp_log.c				\
@@ -73,7 +80,7 @@ objects = $(addprefix $(srcdir), $(sources:%.c=%.o))
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(objects)
-	$(CC) -lcrypt -o $@ $^ -L$(dir $(LIBFT)) -lft $(DEBUG)
+	$(CC) -o $@ $^ $(LIBS) $(DEBUG)
 
 $(objects): $(addprefix $(incdir), $(headers))
 

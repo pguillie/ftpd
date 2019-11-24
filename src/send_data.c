@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/24 10:49:01 by pguillie          #+#    #+#             */
-/*   Updated: 2019/11/16 11:42:54 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/24 13:40:16 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 static int flush_data(char *data, int soc, size_t *i)
 {
-	if (send(soc, data, *i, MSG_NOSIGNAL) < 0)
+	if (send(soc, data, *i, 0) < 0)
 		return -1;
 	*i = 0;
 	return 0;
@@ -42,7 +42,7 @@ static int send_data_asc(int soc, int fd)
 			data[i++] = buf[j++];
 		}
 	}
-	if (n < 0 || ((i && send(soc, data, i, MSG_NOSIGNAL) < 0)))
+	if (n < 0 || ((i && send(soc, data, i, 0) < 0)))
 		return -1;
 	return 0;
 }
@@ -53,7 +53,7 @@ static int send_data_bin(int soc, int fd)
 	ssize_t n;
 
 	while ((n = read(fd, buf, sizeof(buf))) > 0) {
-		if (send(soc, buf, n, MSG_NOSIGNAL) < 0)
+		if (send(soc, buf, n, 0) < 0)
 			return -1;
 	}
 	if (n < 0)

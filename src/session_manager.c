@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 11:23:05 by pguillie          #+#    #+#             */
-/*   Updated: 2019/11/24 12:39:29 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/24 14:31:32 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ int session_manager(int sock, struct sockaddr_storage addr, socklen_t addr_len)
 	struct ftp_session session;
 	int ret;
 
-	if (signal(SIGCHLD, SIG_DFL) == SIG_ERR)
+	if (signal(SIGCHLD, SIG_DFL) == SIG_ERR
+		|| signal(SIGPIPE, SIG_IGN) == SIG_ERR)
 		exit(EXIT_FAILURE);
 	if (init_session(&session, sock, addr, addr_len) == -1)
 		die(&session);

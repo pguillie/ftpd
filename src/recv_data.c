@@ -6,7 +6,7 @@
 /*   By: pguillie <pguillie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/25 11:55:38 by pguillie          #+#    #+#             */
-/*   Updated: 2019/11/16 11:43:09 by pguillie         ###   ########.fr       */
+/*   Updated: 2019/11/24 13:40:06 by pguillie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int recv_data_asc(int soc, int fd)
 	size_t i, j;
 
 	i = 0;
-	while ((n = recv(soc, data, sizeof(data), MSG_NOSIGNAL)) > 0) {
+	while ((n = recv(soc, data, sizeof(data), 0)) > 0) {
 		j = 0;
 		while (j < (size_t)n) {
 			if (data[j] == '\n' && i && buf[i - 1] == '\r')
@@ -58,7 +58,7 @@ static int recv_data_bin(int soc, int fd)
 	char buf[BUFSIZE];
 	ssize_t n;
 
-	while ((n = recv(soc, buf, sizeof(buf), MSG_NOSIGNAL)) > 0) {
+	while ((n = recv(soc, buf, sizeof(buf), 0)) > 0) {
 		if (write(fd, buf, n) < 0)
 			return -1;
 	}
